@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import bottomLeftCircle from "../../assets/login/bottomLeftCircle.svg";
 import topRightCircle from "../../assets/login/topRightCircle.svg";
 import LogoBhinekas from "../../assets/LogoBhinekas.png";
@@ -69,7 +69,7 @@ const LoginPage = () => {
 
     handleCookiePermission();
   }, []);
-  
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="md:w-[50%] w-[80%] mx-auto my-auto flex flex-col p-10">
