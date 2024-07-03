@@ -1,15 +1,9 @@
 {
-    "routes": [
-        { "src": "/login", "dest": "/index.html" },
-        { "src": "/admin", "dest": "/index.html" },
-        { "src": "/teacher", "dest": "/index.html" },
-        { "src": "/teacher/add-log", "dest": "/index.html" },
-        { "src": "/parent", "dest": "/index.html" },
-        { "src": "/profile", "dest": "/index.html" },
-        { "src": "/admin/add-user", "dest": "/index.html" },
-        { "src": "/admin/add-student", "dest": "/index.html" },
-        { "src": "/admin/manage-users", "dest": "/index.html" },
-        { "src": "/admin/manage-students", "dest": "/index.html" },
-        { "src": "/(.*)", "dest": "/index.html" }
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
     ]
-}
+  }
+  
