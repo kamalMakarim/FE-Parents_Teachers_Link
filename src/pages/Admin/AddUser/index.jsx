@@ -12,6 +12,7 @@ const AddUserPage = () => {
   };
 
   const handleSubmit = (e) => {
+    setMessage("Please Wait...");
     e.preventDefault();
     // Perform the POST request here
     axios

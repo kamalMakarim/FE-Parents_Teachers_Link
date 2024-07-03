@@ -8,6 +8,7 @@ const AddUserPage = () => {
 
 
   const handleSubmit = (e) => {
+    setMessage("Please Wait...");
     e.preventDefault();
     // Perform the POST request here
     axios
@@ -16,6 +17,8 @@ const AddUserPage = () => {
         batch: e.target.batch.value,
         parent_username: e.target.parent_username.value,
         class_name: e.target.class_name.value,
+      }, {
+        withCredentials: true
       })
       .then((response) => {
         // Handle success
