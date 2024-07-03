@@ -58,6 +58,18 @@ const LoginPage = () => {
       });
   };
 
+  useEffect(() => {
+    const handleCookiePermission = () => {
+      const cookiePermission = localStorage.getItem("cookiePermission");
+      if (!cookiePermission) {
+        localStorage.setItem("cookiePermission", "granted");
+        console.log("Cookies have been automatically accepted.");
+      }
+    };
+
+    handleCookiePermission();
+  }, []);
+  
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="md:w-[50%] w-[80%] mx-auto my-auto flex flex-col p-10">
@@ -127,4 +139,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-  
