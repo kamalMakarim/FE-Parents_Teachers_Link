@@ -191,7 +191,7 @@ const TeacherPage = () => {
             />
             <div
               ref={logsRef}
-              className="mt-1 overflow-auto h-[60vh] mb-1 rounded-xl"
+              className="mt-1 overflow-auto h-[50vh] mb-1 rounded-xl"
             >
               {logs.length > 0 &&
                 logs.map((log) =>
