@@ -235,10 +235,10 @@ const TeacherPage = () => {
                   ) : (
                     <div
                       key={log._id}
-                      className={`bg-gray-200 rounded-2xl flex flex-row my-3 items-center p-2 w-[55vw] ${
+                      className={`rounded-2xl flex flex-row my-3 items-center p-2 w-[55vw] ${
                         localStorage.getItem("display_name") === log.writter
-                          ? "ml-auto"
-                          : "mr-auto"
+                          ? "ml-auto bg-green-200"
+                          : "mr-auto bg-gray-200"
                       }`}
                     >
                       <div className={`flex flex-col`}>
