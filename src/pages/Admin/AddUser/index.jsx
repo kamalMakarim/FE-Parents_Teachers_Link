@@ -22,6 +22,10 @@ const AddUserPage = () => {
         password: e.target.password.value,
         role: selectedRole,
         class_name: selectedRole === "teacher" ? e.target.class.value : null,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       })
       .then((response) => {
         // Handle success

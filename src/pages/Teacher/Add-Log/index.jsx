@@ -15,6 +15,7 @@ const AddLogPage = () => {
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -40,6 +41,7 @@ const AddLogPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }

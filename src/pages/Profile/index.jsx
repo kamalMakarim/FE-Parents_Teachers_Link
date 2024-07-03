@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import editSVG from "../../assets/teacher/edit.svg";
 import { API_URL } from "../../../API_URL";
 import axios from "axios";
-axios.defaults.withCredentials = true;
 
 const ProfilePage = () => {
   const [isEditingName, setIsEditingName] = useState(false);
@@ -35,7 +34,12 @@ const ProfilePage = () => {
       const response = await axios.put(
         `${API_URL}/user/update-display-name`,
         { display_name: displayName },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       if (response.status === 200) {
         const result = response.data;
@@ -56,17 +60,26 @@ const ProfilePage = () => {
   const handleSavePassword = async () => {
     // Make a request to the backend to save the new password
     try {
-      const response = await axios.put(`${API_URL}/user/update-password`, {
-        new_password: password,
-      });
+      const response = await axios.put(
+        `${API_URL}/user/update-password`,
+        {
+          new_password: password,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         // Assuming the response contains a message or confirmation
         setIsEditingPassword(false);
         setPassword("");
-        setMessage(result.message);
+        setMessage(response.data.message);
       } else {
-        setMessage(result.message);
+        setMessage(response.data.message);
         console.error("Failed to update password");
       }
     } catch (error) {

@@ -18,6 +18,9 @@ const AddUserPage = () => {
         parent_username: e.target.parent_username.value,
         class_name: e.target.class_name.value,
       }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
         withCredentials: true
       })
       .then((response) => {

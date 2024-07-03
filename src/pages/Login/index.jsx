@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import bottomLeftCircle from "../../assets/login/bottomLeftCircle.svg";
 import topRightCircle from "../../assets/login/topRightCircle.svg";
-import LogoBhinekas from "../../assets/LogoBhinekas.png";
 import usernameLogo from "../../assets/login/username.svg";
 import passwordLogo from "../../assets/login/password.svg";
 import hidePasswordSvg from "../../assets/login/hide.svg";
@@ -36,6 +35,7 @@ const LoginPage = () => {
           localStorage.setItem("username", response.data.data.username);
           localStorage.setItem("role", response.data.data.role);
           localStorage.setItem("display_name", response.data.data.display_name);
+          localStorage.setItem("token", response.data.token);
 
           const role = response.data.data.role;
           if (role === "admin") {
@@ -74,7 +74,7 @@ const LoginPage = () => {
     <div className="w-full h-full flex justify-center items-center">
       <div className="md:w-[50%] w-[80%] mx-auto my-auto flex flex-col p-10">
         <img
-          src={LogoBhinekas}
+          src="https://res.cloudinary.com/dscilmmzw/image/upload/v1720021243/LogoBhinekas_lvhmtn.png"
           alt="Logo Bhinekas"
           className="w-full mx-auto"
         />

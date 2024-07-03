@@ -11,7 +11,6 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
-axios.defaults.withCredentials = true;
 
 const TeacherPage = () => {
   const [students, setStudents] = useState([]);
@@ -25,6 +24,7 @@ const TeacherPage = () => {
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -50,6 +50,7 @@ const TeacherPage = () => {
       .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -67,6 +68,7 @@ const TeacherPage = () => {
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -103,6 +105,7 @@ const TeacherPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }
@@ -136,6 +139,7 @@ const TeacherPage = () => {
           },
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         })

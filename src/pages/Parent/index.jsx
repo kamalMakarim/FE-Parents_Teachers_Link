@@ -22,8 +22,8 @@ const ParentPage = () => {
       .get(`${API_URL}/student/getStudentsOfParent`, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        withCredentials: true,
       })
       .then((response) => {
         setStudents(response.data.sort((a, b) => a.name.localeCompare(b.name)));
@@ -47,6 +47,7 @@ const ParentPage = () => {
       .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -64,6 +65,7 @@ const ParentPage = () => {
       .get(`${API_URL}/student/getStudentsOfParent`, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -95,11 +97,12 @@ const ParentPage = () => {
         `${API_URL}/chat/createChat`,
         {
           message: message,
-          studentId: selectedStudent.id,
+          studentId: selectedStudent.id
         },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }
@@ -188,10 +191,10 @@ const ParentPage = () => {
                   ) : (
                     <div
                       key={log._id}
-                      className={`bg-gray-200 rounded-2xl flex flex-row my-3 items-center p-2 w-[55vw] ${
+                      className={`rounded-2xl flex flex-row my-3 items-center p-2 w-[55vw] ${
                         localStorage.getItem("display_name") === log.writter
-                          ? "ml-auto"
-                          : "mr-auto"
+                          ? "ml-auto bg-green-200 "
+                          : "mr-auto bg-gray-200"
                       }`}
                     >
                       <div className={`flex flex-col`}>
