@@ -9,7 +9,6 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import { formatDistanceToNow } from "date-fns";
 import CustomDropdown from "../../../components/CustomDropdown";
 import { enUS } from "date-fns/locale";
-import { set } from "mongoose";
 
 const ParentPage = () => {
   const [students, setStudents] = useState([]);
