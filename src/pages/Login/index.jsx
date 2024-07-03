@@ -36,7 +36,7 @@ const LoginPage = () => {
           localStorage.setItem("username", response.data.data.username);
           localStorage.setItem("role", response.data.data.role);
           localStorage.setItem("display_name", response.data.data.display_name);
-          cookies.setItem
+
           const role = response.data.data.role;
           if (role === "admin") {
             window.location.href = "/admin";
