@@ -29,7 +29,6 @@ const ParentPage = () => {
         setStudents(response.data.sort((a, b) => a.name.localeCompare(b.name)));
         setSelectedStudent(response.data[0]);
         getStudentLogs();
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
