@@ -9,6 +9,7 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import { formatDistanceToNow } from "date-fns";
 import CustomDropdown from "../../../components/CustomDropdown";
 import { enUS } from "date-fns/locale";
+import { set } from "mongoose";
 
 const ParentPage = () => {
   const [students, setStudents] = useState([]);
@@ -18,6 +19,7 @@ const ParentPage = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${API_URL}/student/getStudentsOfParent`, {
         headers: {
@@ -42,6 +44,7 @@ const ParentPage = () => {
   }, [selectedStudent]);
 
   const getStudentLogs = async () => {
+    setLoading(true);
     axios
       .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
         headers: {
@@ -60,6 +63,7 @@ const ParentPage = () => {
   };
 
   const getStudentsOfParent = async () => {
+    setLoading(true);
     axios
       .get(`${API_URL}/student/getStudentsOfParent`, {
         headers: {
@@ -91,6 +95,7 @@ const ParentPage = () => {
   };
 
   const handleSendChat = () => {
+    setLoading(true);
     axios
       .post(
         `${API_URL}/chat/createChat`,

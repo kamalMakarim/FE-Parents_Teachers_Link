@@ -11,6 +11,7 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
+import { set } from "mongoose";
 
 const TeacherPage = () => {
   const [students, setStudents] = useState([]);
@@ -20,6 +21,7 @@ const TeacherPage = () => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
@@ -45,6 +47,7 @@ const TeacherPage = () => {
   }, [selectedStudent]);
 
   const getStudentLogs = async () => {
+    setLoading(true);
     axios
       .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
         headers: {
@@ -63,6 +66,7 @@ const TeacherPage = () => {
   };
 
   const getStudentClass = async () => {
+    setLoading(true);
     axios
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
@@ -94,6 +98,7 @@ const TeacherPage = () => {
   };
 
   const handleSendChat = () => {
+    setLoading(true);
     axios
       .post(
         `${API_URL}/chat/createChat`,
@@ -122,6 +127,7 @@ const TeacherPage = () => {
   };
 
   const handleDeleteLog = (log) => {
+    setLoading(true);
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this log?"
     );
