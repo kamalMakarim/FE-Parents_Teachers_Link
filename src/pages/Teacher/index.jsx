@@ -11,7 +11,6 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { set } from "mongoose";
 
 const TeacherPage = () => {
   const [students, setStudents] = useState([]);
