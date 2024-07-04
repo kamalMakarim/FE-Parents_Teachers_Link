@@ -77,6 +77,7 @@ const ParentPage = () => {
       })
       .then((response) => {
         setStudents(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
