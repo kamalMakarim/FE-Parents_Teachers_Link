@@ -58,6 +58,7 @@ const LoginPage = () => {
       })
       .catch((error) => {
         setMessage("An error occured");
+        setLoading(false);
         console.log(error);
       });
   };
