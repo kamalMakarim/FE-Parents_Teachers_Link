@@ -53,6 +53,7 @@ const LoginPage = () => {
         } else {
           console.log(response.data.message);
           setMessage(response.data.message);
+          setLoading(false);
         }
       })
       .catch((error) => {
