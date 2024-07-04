@@ -34,12 +34,11 @@ const LoginPage = () => {
         }
       )
       .then((response) => {
-        
         if (response.data.message === "Login successful") {
+          localStorage.setItem("token", response.data.token);
           localStorage.setItem("username", response.data.data.username);
           localStorage.setItem("role", response.data.data.role);
           localStorage.setItem("display_name", response.data.data.display_name);
-          localStorage.setItem("token", response.data.token);
           setLoading(false);
 
           const role = response.data.data.role;
