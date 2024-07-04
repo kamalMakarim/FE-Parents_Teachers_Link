@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "../../../API_URL";
 
 const AdminPage = () => {
+  const handleDeleteAllLogs = () => {
+    axios
+      .delete(`${API_URL}/log/deleteAll`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        alert("Logs deleted successfully!");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="bg-[#00AFEF] min-h-screen flex flex-col">
       <div className="pt-10 pl-10">
@@ -21,6 +41,16 @@ const AdminPage = () => {
         </button>
         <button onClick={() => window.location.href = '/admin/manage-students'} className="bg-blue-500 hover:bg-blue-600 mt-5 text-white font-bold py-2 px-4 rounded">
           Manage Students
+        </button>
+        <button
+          onClick={() => {
+            if (window.confirm("Are you sure you want to delete all logs?")) {
+              handleDeleteAllLogs();
+            }
+          }}
+          className="bg-red-500 hover:bg-red-600 mt-5 text-white font-bold py-2 px-4 rounded"
+        >
+          Delete All Logs
         </button>
       </div>
     </div>

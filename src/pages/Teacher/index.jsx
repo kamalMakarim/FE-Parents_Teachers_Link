@@ -43,6 +43,7 @@ const TeacherPage = () => {
   useEffect(() => {
     getStudentClass();
     getStudentLogs();
+    setLoading(false);
   }, [selectedStudent]);
 
   const getStudentLogs = async () => {
@@ -57,7 +58,6 @@ const TeacherPage = () => {
       })
       .then((response) => {
         setLogs(response.data);
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -190,7 +190,7 @@ const TeacherPage = () => {
             />
             <div
               ref={logsRef}
-              className="mt-1 overflow-auto h-[50vh] mb-1 rounded-xl"
+              className="mt-1 overflow-auto h-[60vh] mb-1 rounded-xl"
             >
               {logs.length > 0 &&
                 logs.map((log) =>
@@ -248,7 +248,7 @@ const TeacherPage = () => {
                     >
                       <div className={`flex flex-col`}>
                         <div className="flex flex-row items-center">
-                          <p className="font-poppins font-bold text-lg">
+                          <p className="font-poppins font-semibold text-xs md:text-base">
                             {log.writter}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
@@ -268,7 +268,7 @@ const TeacherPage = () => {
             </div>
           </div>
         )}
-        <div className="flex flex-row mt-auto">
+        <div className="flex flex-row mt-2">
           <textarea
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
             placeholder="Type your message..."

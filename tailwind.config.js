@@ -9,6 +9,11 @@ export default {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
       },
+      animation: {
+        'bounce-0': 'bounce 1s infinite 0s',
+        'bounce-200': 'bounce 1s infinite 0.2s',
+        'bounce-400': 'bounce 1s infinite 0.4s',
+      },
     },
   },
   plugins: [],
