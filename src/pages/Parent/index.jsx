@@ -40,7 +40,6 @@ const ParentPage = () => {
   const fetchData = async () => {
       await getStudentsOfParent();
       await getStudentLogs();
-      setLoading(false);
   };
   
   useEffect(() => {
@@ -59,6 +58,7 @@ const ParentPage = () => {
       })
       .then((response) => {
         setLogs(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);

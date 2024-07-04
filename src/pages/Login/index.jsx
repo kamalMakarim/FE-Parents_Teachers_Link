@@ -7,7 +7,6 @@ import hidePasswordSvg from "../../assets/login/hide.svg";
 import showPasswordSvg from "../../assets/login/unhide.svg";
 import { API_URL } from "../../../API_URL.js";
 import axios from "axios";
-import { set } from "date-fns";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

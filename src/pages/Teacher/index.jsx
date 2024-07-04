@@ -48,7 +48,6 @@ const TeacherPage = () => {
   const fetchData = async () => {
     await getStudentClass();
     await getStudentLogs();
-    setLoading(false);
   };
 
   const getStudentLogs = async () => {
@@ -63,6 +62,7 @@ const TeacherPage = () => {
       })
       .then((response) => {
         setLogs(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
