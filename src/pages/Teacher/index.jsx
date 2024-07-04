@@ -11,6 +11,7 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
+import { set } from "mongoose";
 
 const TeacherPage = () => {
   const [students, setStudents] = useState([]);
@@ -33,6 +34,7 @@ const TeacherPage = () => {
         setStudents(response.data.sort((a, b) => a.name.localeCompare(b.name)));
         setSelectedStudent(response.data[0]);
         getStudentLogs();
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
