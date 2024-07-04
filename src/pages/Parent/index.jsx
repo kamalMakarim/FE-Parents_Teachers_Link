@@ -100,7 +100,7 @@ const ParentPage = () => {
         `${API_URL}/chat/createChat`,
         {
           message: message,
-          studentId: selectedStudent.id
+          studentId: selectedStudent.id,
         },
         {
           headers: {
@@ -140,11 +140,7 @@ const ParentPage = () => {
         </h1>
       </div>
       <div className="flex flex-col mt-5 bg-white rounded-t-2xl p-10 flex-grow">
-        {!loading ? (
-          <div className="flex justify-center items-center h-full">
-            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        ) : (
+        {loading ? (
           <div>
             <CustomDropdown
               students={students}
@@ -221,6 +217,10 @@ const ParentPage = () => {
                   )
                 )}
             </div>
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
         <div className="flex flex-row mt-2">
