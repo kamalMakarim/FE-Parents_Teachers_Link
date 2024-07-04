@@ -37,10 +37,14 @@ const ParentPage = () => {
       });
   }, []);
 
-  useEffect(async () => {
-    await getStudentsOfParent();
-    await getStudentLogs();
-    setLoading(false);
+  const fetchData = async () => {
+      await getStudentsOfParent();
+      await getStudentLogs();
+      setLoading(false);
+  };
+  
+  useEffect(() => {
+      fetchData();
   }, [selectedStudent]);
 
   const getStudentLogs = async () => {

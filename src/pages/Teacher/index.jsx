@@ -41,11 +41,15 @@ const TeacherPage = () => {
       });
   }, []);
 
-  useEffect(async() => {
+  useEffect(() => {
+    fetchData();
+  }, [selectedStudent]);
+
+  const fetchData = async () => {
     await getStudentClass();
     await getStudentLogs();
     setLoading(false);
-  }, [selectedStudent]);
+  };
 
   const getStudentLogs = async () => {
     setLoading(true);
