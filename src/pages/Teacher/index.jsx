@@ -41,9 +41,9 @@ const TeacherPage = () => {
       });
   }, []);
 
-  useEffect(() => {
-    getStudentClass();
-    getStudentLogs();
+  useEffect(async() => {
+    await getStudentClass();
+    await getStudentLogs();
     setLoading(false);
   }, [selectedStudent]);
 
@@ -178,7 +178,7 @@ const TeacherPage = () => {
         </h1>
       </div>
       <div className="flex flex-col mt-5 bg-white rounded-t-2xl p-10 flex-grow">
-        {loading ? (
+        {!loading ? (
           <div>
             <CustomDropdown
               students={students}

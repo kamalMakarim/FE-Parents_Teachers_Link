@@ -30,7 +30,6 @@ const ParentPage = () => {
         setStudents(response.data.sort((a, b) => a.name.localeCompare(b.name)));
         setSelectedStudent(response.data[0]);
         getStudentLogs();
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -38,9 +37,9 @@ const ParentPage = () => {
       });
   }, []);
 
-  useEffect(() => {
-    getStudentsOfParent();
-    getStudentLogs();
+  useEffect(async () => {
+    await getStudentsOfParent();
+    await getStudentLogs();
     setLoading(false);
   }, [selectedStudent]);
 
@@ -140,7 +139,7 @@ const ParentPage = () => {
         </h1>
       </div>
       <div className="flex flex-col mt-5 bg-white rounded-t-2xl p-10 flex-grow">
-        {loading ? (
+        {!loading ? (
           <div>
             <CustomDropdown
               students={students}
