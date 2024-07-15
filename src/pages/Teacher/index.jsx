@@ -99,8 +99,7 @@ const TeacherPage = () => {
       new Date(new Date(timestamp).toLocaleString()),
       { addSuffix: true, locale: enUS }
     );
-    // return formatted.replace("about ", "");
-    return "time ago";
+    return formatted.replace("about ", "");
   };
 
   const handleSendChat = () => {
@@ -221,12 +220,12 @@ const TeacherPage = () => {
                             {log.type}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {formatWithoutAbout(
+                            {/* {formatWithoutAbout(
                               new Date(
                                 new Date(log.timestamp).toLocaleString()
                               ),
                               { locale: enUS }
-                            )}
+                            )} */}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>

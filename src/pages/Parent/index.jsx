@@ -95,8 +95,7 @@ const ParentPage = () => {
       addSuffix: true,
       locale: enUS,
     });
-    // return formatted.replace("about ", "");
-    return "time ago";
+    return formatted.replace("about ", "");
   };
   const handleSendChat = () => {
     setLoading(true);
@@ -208,12 +207,12 @@ const ParentPage = () => {
                             {log.writter}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {formatWithoutAbout(
+                            {/* {formatWithoutAbout(
                               new Date(
                                 new Date(log.timestamp).toLocaleString()
                               ),
                               { locale: enUS }
-                            )}
+                            )} */log.timestamp}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>
