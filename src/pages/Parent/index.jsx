@@ -90,13 +90,13 @@ const ParentPage = () => {
   };
 
   const formatWithoutAbout = (timestamp) => {
-    const date = new Date(timestamp);
-    const formatted = formatDistanceToNow(date, {
+    const formatted = formatDistanceToNow(timestamp, {
       addSuffix: true,
       locale: enUS,
     });
     return formatted.replace("about ", "");
   };
+
   const handleSendChat = () => {
     setLoading(true);
     axios
@@ -181,12 +181,7 @@ const ParentPage = () => {
                             {log.type}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {formatWithoutAbout(
-                              new Date(
-                                new Date(log.timestamp).toLocaleString()
-                              ),
-                              { locale: enUS }
-                            )}
+                            {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>
@@ -207,12 +202,7 @@ const ParentPage = () => {
                             {log.writter}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {/* {formatWithoutAbout(
-                              new Date(
-                                new Date(log.timestamp).toLocaleString()
-                              ),
-                              { locale: enUS }
-                            )} */log.timestamp}
+                            {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>

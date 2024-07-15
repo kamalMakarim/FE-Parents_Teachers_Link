@@ -95,10 +95,10 @@ const TeacherPage = () => {
   };
 
   const formatWithoutAbout = (timestamp) => {
-    const formatted = formatDistanceToNow(
-      new Date(new Date(timestamp).toLocaleString()),
-      { addSuffix: true, locale: enUS }
-    );
+    const formatted = formatDistanceToNow(timestamp, {
+      addSuffix: true,
+      locale: enUS,
+    });
     return formatted.replace("about ", "");
   };
 
@@ -220,12 +220,7 @@ const TeacherPage = () => {
                             {log.type}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {/* {formatWithoutAbout(
-                              new Date(
-                                new Date(log.timestamp).toLocaleString()
-                              ),
-                              { locale: enUS }
-                            )} */}
+                          {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>
@@ -254,12 +249,7 @@ const TeacherPage = () => {
                             {log.writter}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {formatWithoutAbout(
-                              new Date(
-                                new Date(log.timestamp).toLocaleString()
-                              ),
-                              { locale: enUS }
-                            )}
+                          {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>
