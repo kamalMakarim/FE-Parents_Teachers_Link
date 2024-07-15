@@ -8,6 +8,7 @@ import report from "../../assets/log/report.svg";
 import praise from "../../assets/log/praise.svg";
 import deleteSVG from "../../assets/teacher/delete.svg";
 import profileSVG from "../../assets/teacher/profile.svg";
+import sendSVG from "../../assets/teacher/send.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
@@ -42,13 +43,12 @@ const TeacherPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [selectedStudent]);
+    getStudentClass();
+  }, []);
 
-  const fetchData = async () => {
-    await getStudentClass();
-    await getStudentLogs();
-  };
+  useEffect(() => {
+    getStudentLogs();
+  }, [selectedStudent]);
 
   const getStudentLogs = async () => {
     setLoading(true);
@@ -192,7 +192,7 @@ const TeacherPage = () => {
             />
             <div
               ref={logsRef}
-              className="mt-1 overflow-auto h-[60vh] mb-1 rounded-xl"
+              className="mt-1 overflow-auto h-[55vh] mb-1 rounded-xl"
             >
               {logs.length > 0 &&
                 logs.map((log) =>
@@ -284,7 +284,7 @@ const TeacherPage = () => {
             className="ml-2 px-4 py-2 bg-[#00AFEF] text-white rounded-md hover:bg-[#017aa7]"
             onClick={handleSendChat}
           >
-            Send
+            <img src={sendSVG} alt="Send" className="w-5 h-5" />
           </button>
         </div>
       </div>

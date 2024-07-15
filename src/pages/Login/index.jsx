@@ -76,10 +76,10 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-screen flex justify-center items-center bg-gray-100">
       <div className="md:w-[50%] w-[80%] mx-auto my-auto flex flex-col p-10">
         <img
-          src="https://res.cloudinary.com/dscilmmzw/image/upload/v1720021243/LogoBhinekas_lvhmtn.png"
+          src="https://res.cloudinary.com/dscilmmzw/image/upload/v1720954569/LogoBhinekas_compressed_ngbhj6.png"
           alt="Logo Bhinekas"
           className="w-full mx-auto"
         />
@@ -93,7 +93,7 @@ const LoginPage = () => {
           <input
             type="text"
             placeholder="Username"
-            className="w-full bg-white text-black mx-auto focus:outline-none font-poppins text-xl"
+            className="w-full bg-gray-100 text-black mx-auto focus:outline-none font-poppins text-xl"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -110,7 +110,7 @@ const LoginPage = () => {
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
-            className="w-full bg-white text-black mx-auto focus:outline-none font-poppins text-xl"
+            className="w-full bg-gray-100 text-black mx-auto focus:outline-none font-poppins text-xl"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

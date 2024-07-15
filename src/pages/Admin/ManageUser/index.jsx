@@ -44,6 +44,7 @@ const ManageUserPage = () => {
 
   const handleDelete = (username) => {
     setLoading(true);
+
     axios
       .delete(`${API_URL}/user/delete/${username}`, {
         headers: {
@@ -158,7 +159,11 @@ const ManageUserPage = () => {
                     src={deleteSVG}
                     alt="Delete"
                     className="w-6 h-6 cursor-pointer"
-                    onClick={() => handleDelete(user.username)}
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to delete this user?")) {
+                        handleDelete(user.username);
+                      }
+                    }}
                   />
                 </div>
               </div>
