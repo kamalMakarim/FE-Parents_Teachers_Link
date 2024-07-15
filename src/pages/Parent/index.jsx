@@ -213,7 +213,7 @@ const ParentPage = () => {
             </div>
           </div>
         ) : (
-          <div className="flex justify-center items-center h-full">
+          <div className="flex justify-center items-center h-[64vh]">
             <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
