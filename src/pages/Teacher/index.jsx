@@ -99,7 +99,8 @@ const TeacherPage = () => {
       new Date(new Date(timestamp).toLocaleString()),
       { addSuffix: true, locale: enUS }
     );
-    return formatted.replace("about ", "");
+    // return formatted.replace("about ", "");
+    return "time ago";
   };
 
   const handleSendChat = () => {
