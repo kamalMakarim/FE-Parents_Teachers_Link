@@ -70,7 +70,7 @@ const ParentPage = () => {
     axios
       .get(`${API_URL}/student/getStudentsOfParent`, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "applicaftion/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
@@ -90,13 +90,13 @@ const ParentPage = () => {
   };
 
   const formatWithoutAbout = (timestamp) => {
-    const formatted = formatDistanceToNow(
-      new Date(new Date(timestamp).toLocaleString()),
-      { addSuffix: true, locale: enUS }
-    );
+    const date = new Date(timestamp);
+    const formatted = formatDistanceToNow(date, {
+      addSuffix: true,
+      locale: enUS,
+    });
     return formatted.replace("about ", "");
   };
-
   const handleSendChat = () => {
     setLoading(true);
     axios
