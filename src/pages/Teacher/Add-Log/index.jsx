@@ -71,7 +71,7 @@ const AddLogPage = () => {
             Post Type
           </h2>
           <div className="font-poppins flex flex-col text-lg font-medium text-[#00AFEF] w-full text-center">
-            {["Report", "Praise", "Incident", "Announcement"].map((type) => (
+            {["Report", "Praise", "Incident", "Announcement", "Bidang Studi"].map((type) => (
               <React.Fragment key={type}>
                 <div className="flex flex-row items-center">
                   <input
