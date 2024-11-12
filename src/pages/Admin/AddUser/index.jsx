@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_URL } from "../../../../API_URL";
 
 const AddUserPage = () => {
-  const classes = ["Red", "Blue", "Green", "Yellow"];
+  const classes = ["Blue Pinter Morning" , "Blue Pinter Afternoon", "Green Motekar", "Green Wanter", "Green Maher", "Yellow Maher", "Yellow Motekar", "Yellow Wanter"];
   const [message, setMessage] = useState("");
   const [selectedRole, setSelectedRole] = useState("parent");
 

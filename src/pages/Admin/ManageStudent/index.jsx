@@ -227,10 +227,14 @@ const ManageStudentPage = () => {
                 })
               }
             >
-              <option value="Red">Red</option>
-              <option value="Blue">Blue</option>
-              <option value="Green">Green</option>
-              <option value="Yellow">Yellow</option>
+              <option value="Blue Pinter Morning">Blue Pinter Morning</option>
+              <option value="Blue Pinter Afternoon">Blue Pinter Afternoon</option>
+              <option value="Green Motekar">Green Motekar</option>
+              <option value="Green Wanter">Green Wanter</option>
+              <option value="Green Maher">Green Maher</option>
+              <option value="Yellow Maher">Yellow Maher</option>
+              <option value="Yellow Motekar">Yellow Motekar</option>
+              <option value="Yellow Wanter">Yellow Wanter</option>
             </select>
             <button
               className="bg-blue-500 text-white px-4 py-2 mt-2 rounded-md"
