@@ -11,7 +11,7 @@ const ManageUserPage = () => {
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [message, setMessage] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedUser, setSelectedUser] = useState({});
+  const [selectedUser, setSelectedUser] = useState();
 
   useEffect(() => {
     setLoading(true);
@@ -151,8 +151,8 @@ const ManageUserPage = () => {
                     alt="Edit"
                     className="w-6 h-6 cursor-pointer mr-2"
                     onClick={() => {
-                      setShowEditPopup(true);
                       setSelectedUser(user);
+                      setShowEditPopup(true);
                     }}
                   />
                   <img
