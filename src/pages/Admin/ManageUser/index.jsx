@@ -69,7 +69,7 @@ const ManageUserPage = () => {
   const handleSaveEdit = (user, password) => {
     axios
       .put(
-        `${API_URL}/user/update-password`,
+        `${API_URL}/user/update-password-admin`,
         {
           username: user.username,
           new_password: password,
