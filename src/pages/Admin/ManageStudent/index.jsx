@@ -12,6 +12,34 @@ const ManageStudentPage = () => {
   const [message, setMessage] = useState("");
   const [selectedStudent, setSelectedStudent] = useState({});
 
+  const classes = [
+    "Blue Pinter Morning",
+    "Blue Pinter Afternoon",
+    "Green Motekar",
+    "Green Wanter",
+    "Green Maher",
+    "Yellow Maher",
+    "Yellow Motekar",
+    "Yellow Wanter",
+    "Gumujeng",
+    "Someah",
+    "Rancage",
+    "Gentur",
+    "Daria",
+    "Calakan",
+    "Singer",
+    "Rancingeus",
+    "Jatmika",
+    "Gumanti",
+    "Marahmay",
+    "Rucita",
+    "Binangkit",
+    "Gumilang",
+    "Sonagar",
+    "Bidang Study TK",
+    "Bidang Study SD",
+  ];
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -188,7 +216,10 @@ const ManageStudentPage = () => {
               className="border border-gray-300 rounded-md py-2 px-3"
               value={selectedStudent.batch}
               onChange={(e) =>
-                setSelectedStudent({ ...selectedStudent, batch: e.target.value })
+                setSelectedStudent({
+                  ...selectedStudent,
+                  batch: e.target.value,
+                })
               }
             />
             <label
@@ -227,14 +258,11 @@ const ManageStudentPage = () => {
                 })
               }
             >
-              <option value="Blue Pinter Morning">Blue Pinter Morning</option>
-              <option value="Blue Pinter Afternoon">Blue Pinter Afternoon</option>
-              <option value="Green Motekar">Green Motekar</option>
-              <option value="Green Wanter">Green Wanter</option>
-              <option value="Green Maher">Green Maher</option>
-              <option value="Yellow Maher">Yellow Maher</option>
-              <option value="Yellow Motekar">Yellow Motekar</option>
-              <option value="Yellow Wanter">Yellow Wanter</option>
+              {classes.map((classOption) => (
+                <option key={classOption} value={classOption}>
+                  {classOption}
+                </option>
+              ))}
             </select>
             <button
               className="bg-blue-500 text-white px-4 py-2 mt-2 rounded-md"
