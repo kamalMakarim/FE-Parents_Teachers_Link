@@ -24,7 +24,6 @@ const ParentPage = () => {
       .get(`${API_URL}/student/getStudentsOfParent`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((response) => {
@@ -52,7 +51,6 @@ const ParentPage = () => {
       .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -71,7 +69,6 @@ const ParentPage = () => {
       .get(`${API_URL}/student/getStudentsOfParent`, {
         headers: {
           "Content-Type": "applicaftion/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -109,7 +106,6 @@ const ParentPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }

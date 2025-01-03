@@ -11,7 +11,7 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import sendSVG from "../../assets/teacher/send.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
-import { enUS } from "date-fns/locale";
+import { enUS, se } from "date-fns/locale";
 
 const TeacherPage = () => {
   const [students, setStudents] = useState([]);
@@ -21,42 +21,39 @@ const TeacherPage = () => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
+    getStudentClass();
+  }, []);
+
+  useEffect(() => {
+    getStudentLogs(selectedStudent);
+  }, [selectedStudent]);
+
+  const getStudentClass = async () => {
     setLoading(true);
-    axios
+    await axios
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
       .then((response) => {
         setStudents(response.data.sort((a, b) => a.name.localeCompare(b.name)));
         setSelectedStudent(response.data[0]);
-        getStudentLogs();
         setLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
-  }, []);
+  };
 
-  useEffect(() => {
-    getStudentClass();
-  }, []);
-
-  useEffect(() => {
-    getStudentLogs();
-  }, [selectedStudent]);
-
-  const getStudentLogs = async () => {
+  const getStudentLogs = async (student) => {
     setLoading(true);
-    axios
-      .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
+    await axios
+      .post(`${API_URL}/log/getLogOfStudent`, student, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -66,26 +63,6 @@ const TeacherPage = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
-  };
-
-  const getStudentClass = async () => {
-    setLoading(true);
-    axios
-      .get(`${API_URL}/student/getStudentClass`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      })
-      .then((response) => {
-        setStudents(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
       });
   };
 
@@ -114,7 +91,6 @@ const TeacherPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }
@@ -149,7 +125,6 @@ const TeacherPage = () => {
           },
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         })
@@ -220,7 +195,7 @@ const TeacherPage = () => {
                             {log.type}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                          {formatWithoutAbout(new Date(log.timestamp))}
+                            {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>
@@ -249,7 +224,7 @@ const TeacherPage = () => {
                             {log.writter}
                           </p>
                           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                          {formatWithoutAbout(new Date(log.timestamp))}
+                            {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
                         <p className="font-poppins text-sm">{log.message}</p>
