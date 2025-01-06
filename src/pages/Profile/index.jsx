@@ -37,7 +37,7 @@ const ProfilePage = () => {
         {
           withCredentials: true,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json"
           },
         }
       );
@@ -68,7 +68,7 @@ const ProfilePage = () => {
         {
           withCredentials: true,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json"
           },
         }
       );
@@ -88,6 +88,13 @@ const ProfilePage = () => {
     }
   };
 
+  const handleBack = () => {
+    if (localStorage.getItem("class_name").startsWith("Bidang Study")) {
+      window.location.href = "/teacher/bidang-study";
+    } else {
+      window.location.href = `/${localStorage.getItem("role")}`;
+    }
+  }
   return (
     <div className="bg-[#00AFEF] min-h-screen flex flex-col">
       <div className="m-10">
@@ -156,7 +163,13 @@ const ProfilePage = () => {
         <h1 className="font-poppins mt-3 text-black mx-auto text-2xl">
           {message}
         </h1>
+
+        <div className="mt-auto bg-[#00AFEF] text-white rounded-md hover:bg-[#017aa7] p-2 text-center" onClick={handleBack}>
+          Back
+        </div>
+        
       </div>
+      
     </div>
   );
 };

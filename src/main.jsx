@@ -6,6 +6,8 @@ import App from "./App"
 import LoginPage from "./pages/Login/index.jsx"
 import AdminPage from "./pages/Admin/index.jsx"
 import TeacherPage from "./pages/Teacher/index.jsx"
+import TeacherBidangStudy from "./pages/Teacher/BidangStudy/index.jsx"
+import AddLogPageBidangStudy from "./pages/Teacher/BidangStudy/Add-Log/index.jsx"
 import ParentPage from "./pages/Parent/index.jsx"
 import AddLogPage from "./pages/Teacher/Add-Log/index.jsx"
 import ProfilePage from "./pages/Profile/index.jsx"
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: "/teacher/add-log",
         element: <AddLogPage />,
+      },
+      {
+        path: "/teacher/bidang-study/add-log",
+        element: <AddLogPageBidangStudy />,
+      },
+      {
+        path: "/teacher/bidang-study",
+        element: <TeacherBidangStudy />,
       },
       {
         path: "/parent",

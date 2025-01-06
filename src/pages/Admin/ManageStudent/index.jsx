@@ -46,7 +46,6 @@ const ManageStudentPage = () => {
       .get(`${API_URL}/student/all`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -69,13 +68,12 @@ const ManageStudentPage = () => {
     );
   };
 
-  const handleDelete = (studentToDelete) => {
+  const handleDelete = async (studentToDelete) => {
     setLoading(true);
-    axios
+    await axios
       .delete(`${API_URL}/student/delete/${studentToDelete.id}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -96,8 +94,8 @@ const ManageStudentPage = () => {
       });
   };
 
-  const handleSaveEdit = () => {
-    axios
+  const handleSaveEdit = async () => {
+    await axios
       .put(
         `${API_URL}/student/update`,
         {
@@ -110,7 +108,6 @@ const ManageStudentPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }

@@ -7,11 +7,11 @@ const AddUserPage = () => {
   const [message, setMessage] = useState("");
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     setMessage("Please Wait...");
     e.preventDefault();
     // Perform the POST request here
-    axios
+    await axios
       .post(`${API_URL}/student/add`, {
         name: e.target.name.value,
         batch: e.target.batch.value,
@@ -19,7 +19,7 @@ const AddUserPage = () => {
         class_name: e.target.class_name.value,
       }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          "Content-Type": "application/json"
         },
         withCredentials: true
       })

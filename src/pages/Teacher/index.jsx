@@ -11,6 +11,7 @@ import profileSVG from "../../assets/teacher/profile.svg";
 import sendSVG from "../../assets/teacher/send.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
+import UploadButton from "../../../components/UploadImage";
 import { enUS, se } from "date-fns/locale";
 
 const TeacherPage = () => {
@@ -19,6 +20,7 @@ const TeacherPage = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [logs, setLogs] = useState([]);
+  const [imageLink, setImageLink] = useState("");
 
   useEffect(() => {
     getStudentClass();
@@ -67,7 +69,8 @@ const TeacherPage = () => {
   };
 
   const handleChange = (e) => {
-    const student = students.find((s) => s.id === e.target.value);
+    let student = students.find((s) => s.id === e.target.value);
+    student.notification = 0;
     setSelectedStudent(student);
   };
 
@@ -79,35 +82,37 @@ const TeacherPage = () => {
     return formatted.replace("about ", "");
   };
 
-  const handleSendChat = () => {
+  const handleSendChat = async () => {
     setLoading(true);
-    axios
-      .post(
-        `${API_URL}/chat/createChat`,
-        {
-          message: message,
-          studentId: selectedStudent.id,
+    let chatData = {
+      message: message,
+      studentId: selectedStudent.id,
+    };
+
+    if (imageLink) {
+      chatData.image = imageLink.split("/").pop();
+    }
+    console.log(chatData);
+
+    await axios
+      .post(`${API_URL}/chat/createChat`, chatData, {
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      )
+        withCredentials: true,
+      })
       .then((response) => {
-        if (response.data.message === "Chat created") {
-          window.location.reload();
-        } else {
-          console.log(response.data.message);
-        }
+        getStudentLogs();
+        setImageLink("");
+        setMessage("");
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleDeleteLog = (log) => {
+  const handleDeleteLog = async (log) => {
     setLoading(true);
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this log?"
@@ -117,7 +122,7 @@ const TeacherPage = () => {
       for_personal = true;
     }
     if (confirmDelete) {
-      axios
+      await axios
         .delete(`${API_URL}/log/delete`, {
           params: {
             logId: log._id,
@@ -144,10 +149,21 @@ const TeacherPage = () => {
   const logsRef = useRef(null);
 
   useEffect(() => {
-    if (logsRef.current) {
-      logsRef.current.scrollTop = logsRef.current.scrollHeight;
-    }
-  }, [logs]);
+      if (logsRef.current) {
+        logsRef.current.scrollTop = logsRef.current.scrollHeight;
+      }
+  
+      const images = logsRef.current?.getElementsByTagName('img');
+      if (images) {
+        Array.from(images).forEach((img) => {
+        img.onload = () => {
+          if (logsRef.current) {
+          logsRef.current.scrollTop = logsRef.current.scrollHeight;
+          }
+        };
+        });
+      }
+    }, [logs]);
 
   return (
     <div className="bg-[#00AFEF] min-h-screen flex flex-col">
@@ -157,7 +173,7 @@ const TeacherPage = () => {
           {localStorage.getItem("display_name")}
         </h1>
       </div>
-      <div className="flex flex-col mt-5 bg-white rounded-t-2xl p-10 flex-grow">
+      <div className="flex flex-col mt-5 bg-white rounded-t-2xl p-5 flex-grow">
         {!loading ? (
           <div>
             <CustomDropdown
@@ -167,7 +183,7 @@ const TeacherPage = () => {
             />
             <div
               ref={logsRef}
-              className="mt-1 overflow-auto h-[55vh] mb-1 rounded-xl"
+              className="mt-1 overflow-auto h-[63vh] mb-1 rounded-xl"
             >
               {logs.length > 0 &&
                 logs.map((log) =>
@@ -187,7 +203,7 @@ const TeacherPage = () => {
                             : announcement
                         }
                         alt={log.type}
-                        className="w-10 h-10"
+                        className="w-10 h-10 mb-auto"
                       />
                       <div className="flex flex-col ml-2">
                         <div className="flex flex-row items-center">
@@ -198,6 +214,14 @@ const TeacherPage = () => {
                             {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
+                        {log.image && (
+                          <img
+                            src={`${log.image}`}
+                            alt="image"
+                            className="w-max rounded-lg my-2 max-h-[50vh]"
+                            loading="lazy"
+                          />
+                        )}
                         <p className="font-poppins text-sm">{log.message}</p>
                       </div>
                       <div className="flex flex-row ml-auto">
@@ -212,11 +236,12 @@ const TeacherPage = () => {
                   ) : (
                     <div
                       key={log._id}
-                      className={`rounded-2xl flex flex-row my-3 items-center p-2 w-[55vw] ${
+                      className={`rounded-2xl flex flex-row my-3 items-center p-2 max-w-[75vw] ${
                         localStorage.getItem("display_name") === log.writter
                           ? "ml-auto bg-green-200"
                           : "mr-auto bg-gray-200"
                       }`}
+                      style={{ width: "fit-content", maxWidth: "75vw" }}
                     >
                       <div className={`flex flex-col`}>
                         <div className="flex flex-row items-center">
@@ -227,6 +252,14 @@ const TeacherPage = () => {
                             {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
+                        {log.image && (
+                          <img
+                            src={`${log.image}`}
+                            alt="image"
+                            className="w-max rounded-lg my-2 max-h-[50vh]"
+                            loading="lazy"
+                          />
+                        )}
                         <p className="font-poppins text-sm">{log.message}</p>
                       </div>
                     </div>
@@ -236,15 +269,25 @@ const TeacherPage = () => {
           </div>
         ) : (
           <div className="flex justify-center items-center h-[64vh]">
-            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-16 h-16 border-4 border-[#00AFEF] border-t-transparent rounded-full animate-spin"></div>
           </div>
+        )}
+        {imageLink && (
+          <img
+            src={imageLink}
+            alt="Preview"
+            className="w-max h-[10vh] object-contain rounded-md shadow-md"
+            loading="lazy"
+          />
         )}
         <div className="flex flex-row mt-2">
           <textarea
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
+            className="w-full border border-gray-300 rounded-md focus:outline-none mr-2"
             placeholder="Type your message..."
             onChange={(e) => setMessage(e.target.value)}
+            value={message}
           ></textarea>
+          <UploadButton setImageLink={setImageLink} />
           <button
             className="ml-2 px-4 py-2 bg-[#00AFEF] text-white rounded-md hover:bg-[#017aa7]"
             onClick={handleSendChat}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import UploadButton from "../../../../components/UploadImage";
 import { API_URL } from "../../../../API_URL";
 
 const AddLogPage = () => {
@@ -9,13 +10,13 @@ const AddLogPage = () => {
   const [postType, setPostType] = useState("Report");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
+  const [imageLink, setImageLink] = useState("");
 
   useEffect(() => {
     axios
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json"
         },
         withCredentials: true,
       })
@@ -29,19 +30,23 @@ const AddLogPage = () => {
       });
   }, []);
 
-  const handlePostLog = () => {
-    axios
+  const handlePostLog = async() => {
+    let logData = {
+      type: postType,
+      message: description,
+      studentId: forAll ? null : selectedStudent.id,
+    };
+    if(imageLink){
+      logData.image = imageLink.split("/").pop();
+    }
+
+    await axios
       .post(
         `${API_URL}/log/add`,
-        {
-          type: postType,
-          message: description,
-          studentId: forAll ? null : selectedStudent.id,
-        },
+        logData,
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json"
           },
           withCredentials: true,
         }
@@ -70,7 +75,7 @@ const AddLogPage = () => {
           <h2 className="font-poppins text-lg font-bold text-[#00AFEF] w-full mt-7">
             Post Type
           </h2>
-          <div className="font-poppins flex flex-col text-lg font-medium text-[#00AFEF] w-full text-center">
+          <div className="font-poppins grid grid-cols-2 text-lg font-medium text-[#00AFEF] w-full text-center">
             {["Report", "Praise", "Incident", "Announcement"].map((type) => (
               <React.Fragment key={type}>
                 <div className="flex flex-row items-center">
@@ -132,21 +137,33 @@ const AddLogPage = () => {
             )}
           </div>
           <h2 className="font-poppins text-lg font-bold text-[#00AFEF] w-full mt-4">
-            Descrioption
+            Description
           </h2>
           <textarea
-            className="font-poppins text-lg font-medium text-[#00AFEF] w-ful border border-[#00AFEF] rounded-2xl p-2 focus:outline-none"
+            className="font-poppins text-lg font-medium text-[#00AFEF] w-full border border-[#00AFEF] rounded-2xl p-2 focus:outline-none mb-2"
             rows="5"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          {message && <p className="text-red-500 mx-auto">{message}</p>}
+          {imageLink ? (
+            <div className="flex flex-row">
+            <img
+              src={imageLink}
+              alt="Preview"
+              className="w-max h-[10vh] object-contain rounded-md shadow-md mr-2"
+              loading="lazy"
+            />
+            <UploadButton setImageLink={setImageLink} />
+            </div>
+          ):
+          <UploadButton setImageLink={setImageLink} />}
           <button
             onClick={handlePostLog}
-            className="bg-[#00AFEF] text-white mx-auto py-2 mt-5 rounded-2xl font-bold font-poppins text-2xl hover:scale-105 transition-transform w-full"
+            className="bg-[#00AFEF] text-white mx-auto py-2 mt-5 rounded-2xl font-bold font-poppins text-2xl hover:scale-105 transition-transform flex-1 w-full"
           >
             Post
           </button>
+          {message && <p className="text-red-500 mx-auto">{message}</p>}
         </div>
       </div>
     </div>

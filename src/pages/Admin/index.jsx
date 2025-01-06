@@ -3,12 +3,11 @@ import axios from "axios";
 import { API_URL } from "../../../API_URL";
 
 const AdminPage = () => {
-  const handleDeleteAllLogs = () => {
-    axios
+  const handleDeleteAllLogs = async () => {
+    await axios
       .delete(`${API_URL}/log/deleteAll`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })

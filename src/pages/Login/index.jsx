@@ -6,6 +6,7 @@ import passwordLogo from "../../assets/login/password.svg";
 import hidePasswordSvg from "../../assets/login/hide.svg";
 import showPasswordSvg from "../../assets/login/unhide.svg";
 import { API_URL } from "../../../API_URL.js";
+import LogoBhinekas from "../../assets/login/LogoBinekas.png";
 import axios from "axios";
 
 const LoginPage = () => {
@@ -15,10 +16,10 @@ const LoginPage = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     setLoading(true);
     e.preventDefault();
-    axios
+    await axios
       .post(
         `${API_URL}/auth/login`,
         {
@@ -33,18 +34,24 @@ const LoginPage = () => {
         }
       )
       .then((response) => {
+        console.log(response.data);
         if (response.data.message === "Login successful") {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("username", response.data.data.username);
           localStorage.setItem("role", response.data.data.role);
           localStorage.setItem("display_name", response.data.data.display_name);
+          localStorage.setItem("class_name", response.data.data.class_name);  
           setLoading(false);
 
           const role = response.data.data.role;
           if (role === "admin") {
             window.location.href = "/admin";
           } else if (role === "teacher") {
-            window.location.href = "/teacher";
+            if(response.data.data.class_name === "Bidang Study SD" || response.data.data.class_name === "Bidang Study TK"){
+              window.location.href = "/teacher/bidang-study";
+            } else {
+              window.location.href = "/teacher";
+            }
           } else if (role === "parent") {
             window.location.href = "/parent";
           } else {
@@ -79,7 +86,7 @@ const LoginPage = () => {
     <div className="w-full h-screen flex justify-center items-center bg-gray-100">
       <div className="md:w-[50%] w-[80%] mx-auto my-auto flex flex-col p-10">
         <img
-          src="https://res.cloudinary.com/dscilmmzw/image/upload/v1720954569/LogoBhinekas_compressed_ngbhj6.png"
+          src={LogoBhinekas}
           alt="Logo Bhinekas"
           className="w-full mx-auto"
         />
@@ -101,7 +108,7 @@ const LoginPage = () => {
 
         <hr className="w-full mx-auto bg-black border-black border-2" />
 
-        <div className="flex flex-row mt-3">
+        <form className="flex flex-row mt-3" onSubmit={handleSubmit}>
           <img
             src={passwordLogo}
             alt="Password"
@@ -120,12 +127,13 @@ const LoginPage = () => {
             className="w-auto h-5 mb-1 ml-3 cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
           />
-        </div>
+        </form>
         <hr className="w-full mx-auto bg-black border-black border-2" />
         <button
           className={`w-full bg-[#00AFEF] text-white mx-auto py-2 mt-5 rounded-2xl font-bold font-poppins text-2xl hover:scale-105 transition-transform ${
             loading ? "animate-pulse" : ""
           }`}
+          type="submit"
           onClick={handleSubmit}
           disabled={loading}
         >
@@ -150,6 +158,9 @@ const LoginPage = () => {
         alt="Bottom Left Circle"
         className="absolute bottom-0 left-0"
       />
+       <div className="absolute bottom-0 right-0 m-5 text-black text-xs">
+        &copy; {new Date().getFullYear()} Kamal Makarim Iskandar
+      </div>
     </div>
   );
 };

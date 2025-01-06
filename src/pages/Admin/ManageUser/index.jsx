@@ -19,7 +19,6 @@ const ManageUserPage = () => {
       .get(`${API_URL}/user/all`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -42,14 +41,13 @@ const ManageUserPage = () => {
     );
   };
 
-  const handleDelete = (username) => {
+  const handleDelete = async(username) => {
     setLoading(true);
 
-    axios
+    await axios
       .delete(`${API_URL}/user/delete/${username}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       })
@@ -66,8 +64,8 @@ const ManageUserPage = () => {
       });
   };
 
-  const handleSaveEdit = (user, password) => {
-    axios
+  const handleSaveEdit = async(user, password) => {
+    await axios
       .put(
         `${API_URL}/user/update-password-admin`,
         {
@@ -77,7 +75,6 @@ const ManageUserPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }

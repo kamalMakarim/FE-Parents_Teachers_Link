@@ -11,11 +11,11 @@ const AddUserPage = () => {
     setSelectedRole(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     setMessage("Please Wait...");
     e.preventDefault();
     // Perform the POST request here
-    axios
+    await axios
       .post(`${API_URL}/user/add`, {
         username: e.target.username.value,
         display_name: e.target.displayName.value,
@@ -24,8 +24,9 @@ const AddUserPage = () => {
         class_name: selectedRole === "teacher" ? e.target.class.value : null,
       }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
         },
+        withCredentials: true,
       })
       .then((response) => {
         // Handle success

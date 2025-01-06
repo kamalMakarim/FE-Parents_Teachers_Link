@@ -15,7 +15,7 @@ const CustomDropdown = ({ students, selectedStudent, handleChange }) => {
   return (
     <div className="relative w-full">
       <div
-        className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
         onClick={toggleDropdown}
       >
         {selectedStudent.name || "Select a student"}

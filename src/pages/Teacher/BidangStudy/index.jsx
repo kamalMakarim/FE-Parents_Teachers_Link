@@ -1,37 +1,94 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { API_URL } from "../../../API_URL";
-import incident from "../../assets/log/incident.svg";
-import report from "../../assets/log/report.svg";
-import praise from "../../assets/log/praise.svg";
-import announcement from "../../assets/log/announcement.svg";
-import profileSVG from "../../assets/teacher/profile.svg";
-import sendSVG from "../../assets/teacher/send.svg";
-import { formatDistanceToNow, set } from "date-fns";
-import CustomDropdown from "../../../components/CustomDropdown";
-import UploadButton from "../../../components/UploadImage";
-import { enUS } from "date-fns/locale";
+import CustomDropdown from "../../../../components/CustomDropdown";
+import addSVG from "../../../assets/teacher/add.svg";
+import { API_URL } from "../../../../API_URL";
+import incident from "../../../assets/log/incident.svg";
+import report from "../../../assets/log/report.svg";
+import praise from "../../../assets/log/praise.svg";
+import deleteSVG from "../../../assets/teacher/delete.svg";
+import profileSVG from "../../../assets/teacher/profile.svg";
+import sendSVG from "../../../assets/teacher/send.svg";
+import announcement from "../../../assets/log/announcement.svg";
+import { formatDistanceToNow } from "date-fns";
+import UploadButton from "../../../../components/UploadImage";
+import { enUS, se } from "date-fns/locale";
 
-const ParentPage = () => {
+const TeacherPage = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState({});
   const [loading, setLoading] = useState(true);
-  const [logs, setLogs] = useState([]);
   const [message, setMessage] = useState("");
+  const [logs, setLogs] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [selectedClass, setSelectedClass] = useState("");
   const [imageLink, setImageLink] = useState("");
 
   useEffect(() => {
-    getStudentsOfParent();
+    if (localStorage.getItem("class_name") === "Bidang Study TK") {
+      setClasses([
+        "Blue Pinter Morning",
+        "Blue Pinter Afternoon",
+        "Green Motekar",
+        "Green Wanter",
+        "Green Maher",
+        "Yellow Maher",
+        "Yellow Motekar",
+        "Yellow Wanter",
+      ]);
+      setSelectedClass("Blue Pinter Morning");
+    } else if (localStorage.getItem("class_name") === "Bidang Study SD") {
+      setClasses([
+        "Gumujeng",
+        "Someah",
+        "Rancage",
+        "Gentur",
+        "Daria",
+        "Calakan",
+        "Singer",
+        "Rancingeus",
+        "Jatmika",
+        "Gumanti",
+        "Marahmay",
+        "Rucita",
+        "Binangkit",
+        "Gumilang",
+        "Sonagar",
+      ]);
+      setSelectedClass("Gumujeng");
+    }
   }, []);
 
   useEffect(() => {
-    getStudentLogs();
+    getStudentClass();
+  }, [selectedClass]);
+
+  useEffect(() => {
+    getStudentLogs(selectedStudent);
   }, [selectedStudent]);
 
-  const getStudentLogs = async () => {
+  const getStudentClass = async () => {
     setLoading(true);
     await axios
-      .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
+      .get(`${API_URL}/student/getStudentClass`, {
+        params: { class_name: selectedClass },
+        withCredentials: true,
+      })
+      .then((response) => {
+        setStudents(response.data.sort((a, b) => a.name.localeCompare(b.name)));
+        setSelectedStudent(response.data[0]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
+
+  const getStudentLogs = async (student) => {
+    setLoading(true);
+    await axios
+      .post(`${API_URL}/log/getLogOfStudent`, student, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,27 +99,6 @@ const ParentPage = () => {
         setLoading(false);
       })
       .catch((error) => {
-        setLoading(false);
-        console.log(error);
-      });
-  };
-
-  const getStudentsOfParent = async () => {
-    setLoading(true);
-    await axios
-      .get(`${API_URL}/student/getStudentsOfParent`, {
-        headers: {
-          "Content-Type": "applicaftion/json",
-        },
-        withCredentials: true,
-      })
-      .then((response) => {
-        setStudents(response.data.sort((a, b) => a.name.localeCompare(b.name)));
-        setSelectedStudent(response.data[0]);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
         console.log(error);
       });
   };
@@ -72,7 +108,6 @@ const ParentPage = () => {
     student.notification = 0;
     setSelectedStudent(student);
   };
-
   const formatWithoutAbout = (timestamp) => {
     const formatted = formatDistanceToNow(timestamp, {
       addSuffix: true,
@@ -101,14 +136,48 @@ const ParentPage = () => {
         withCredentials: true,
       })
       .then((response) => {
-        getStudentLogs();
-        setLoading(false);
         setImageLink("");
         setMessage("");
+        setLoading(false);
+        getStudentLogs();
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleDeleteLog = async (log) => {
+    setLoading(true);
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this log?"
+    );
+    let for_personal = false;
+    if (log.studentId) {
+      for_personal = true;
+    }
+    if (confirmDelete) {
+      await axios
+        .delete(`${API_URL}/log/delete`, {
+          params: {
+            logId: log._id,
+            personal: for_personal,
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .then((response) => {
+          if (response.data.message === "Log deleted") {
+            window.location.reload();
+          } else {
+            console.log(response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const logsRef = useRef(null);
@@ -118,14 +187,14 @@ const ParentPage = () => {
       logsRef.current.scrollTop = logsRef.current.scrollHeight;
     }
 
-    const images = logsRef.current?.getElementsByTagName('img');
+    const images = logsRef.current?.getElementsByTagName("img");
     if (images) {
       Array.from(images).forEach((img) => {
-      img.onload = () => {
-        if (logsRef.current) {
-        logsRef.current.scrollTop = logsRef.current.scrollHeight;
-        }
-      };
+        img.onload = () => {
+          if (logsRef.current) {
+            logsRef.current.scrollTop = logsRef.current.scrollHeight;
+          }
+        };
       });
     }
   }, [logs]);
@@ -141,6 +210,20 @@ const ParentPage = () => {
       <div className="flex flex-col mt-5 bg-white rounded-t-2xl p-5 flex-grow">
         {!loading ? (
           <div>
+            <div className="mb-4">
+              <select
+                id="classSelect"
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                className="block appearance-none w-full bg-white border hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+              >
+                {classes.map((className) => (
+                  <option key={className} value={className}>
+                    {className}
+                  </option>
+                ))}
+              </select>
+            </div>
             <CustomDropdown
               students={students}
               selectedStudent={selectedStudent}
@@ -148,7 +231,7 @@ const ParentPage = () => {
             />
             <div
               ref={logsRef}
-              className="mt-1 overflow-auto h-[63vh] mb-1 rounded-xl"
+              className="mt-1 overflow-auto h-[55vh] mb-1 rounded-xl"
             >
               {logs.length > 0 &&
                 logs.map((log) =>
@@ -189,6 +272,14 @@ const ParentPage = () => {
                         )}
                         <p className="font-poppins text-sm">{log.message}</p>
                       </div>
+                      <div className="flex flex-row ml-auto">
+                        <img
+                          src={deleteSVG}
+                          alt="Delete"
+                          className="w-5 h-5 ml-2 hover:cursor-pointer"
+                          onClick={() => handleDeleteLog(log)}
+                        />
+                      </div>
                     </div>
                   ) : (
                     <div
@@ -212,7 +303,7 @@ const ParentPage = () => {
                         {log.image && (
                           <img
                             src={`${log.image}`}
-                            alt="Image"
+                            alt="image"
                             className="w-max rounded-lg my-2 max-h-[50vh]"
                             loading="lazy"
                           />
@@ -255,6 +346,14 @@ const ParentPage = () => {
       </div>
       <div className="absolute m-10 top-0 right-0 flex flex-row">
         <img
+          src={addSVG}
+          alt="Add Student"
+          className="w-7 hover:cursor-pointer hover:scale-105"
+          onClick={() => {
+            window.location.href = "/teacher/bidang-study/add-log";
+          }}
+        />
+        <img
           src={profileSVG}
           alt="Profile"
           className="w-7 ml-3 hover:cursor-pointer hover:scale-105"
@@ -267,4 +366,4 @@ const ParentPage = () => {
   );
 };
 
-export default ParentPage;
+export default TeacherPage;
