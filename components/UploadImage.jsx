@@ -113,7 +113,7 @@ const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink})
     <div className="relative flex flex-col items-center">
       <button
         onClick={() => setIsModalOpen(true)}
-        className="px-4 py-2 bg-[#00AFEF] text-white rounded-md hover:bg-[#017aa7] h-full w-full"
+        className="bg-[#00AFEF] text-white rounded-md hover:bg-[#017aa7] h-full w-full"
       >
         <img src={Clip} alt="Clip" className="w-5 h-5 mx-auto my-auto" />
       </button>
