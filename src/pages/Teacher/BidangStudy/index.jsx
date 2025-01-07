@@ -140,7 +140,7 @@ const TeacherPage = () => {
         setImageLink("");
         setMessage("");
         setLoading(false);
-        getStudentLogs();
+        getStudentLogs(selectedClass);
       })
       .catch((error) => {
         console.log(error);
