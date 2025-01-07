@@ -118,14 +118,14 @@ const ParentPage = () => {
       logsRef.current.scrollTop = logsRef.current.scrollHeight;
     }
 
-    const images = logsRef.current?.getElementsByTagName('img');
+    const images = logsRef.current?.getElementsByTagName("img");
     if (images) {
       Array.from(images).forEach((img) => {
-      img.onload = () => {
-        if (logsRef.current) {
-        logsRef.current.scrollTop = logsRef.current.scrollHeight;
-        }
-      };
+        img.onload = () => {
+          if (logsRef.current) {
+            logsRef.current.scrollTop = logsRef.current.scrollHeight;
+          }
+        };
       });
     }
   }, [logs]);
@@ -187,7 +187,14 @@ const ParentPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">{log.message}</p>
+                        <p className="font-poppins text-sm">
+                          {log.message.split("\n").map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                        </p>
                       </div>
                     </div>
                   ) : (
@@ -217,7 +224,14 @@ const ParentPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">{log.message}</p>
+                        <p className="font-poppins text-sm">
+                          {log.message.split("\n").map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                        </p>
                       </div>
                     </div>
                   )

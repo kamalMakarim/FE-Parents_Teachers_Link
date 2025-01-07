@@ -270,7 +270,14 @@ const TeacherPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">{log.message}</p>
+                        <p className="font-poppins text-sm">
+                          {log.message.split("\n").map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                        </p>
                       </div>
                       <div className="flex flex-row ml-auto">
                         <img
@@ -308,7 +315,14 @@ const TeacherPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">{log.message}</p>
+                        <p className="font-poppins text-sm">
+                          {log.message.split("\n").map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                        </p>
                       </div>
                     </div>
                   )

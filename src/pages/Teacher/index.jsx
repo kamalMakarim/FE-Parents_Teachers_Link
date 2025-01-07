@@ -149,21 +149,21 @@ const TeacherPage = () => {
   const logsRef = useRef(null);
 
   useEffect(() => {
-      if (logsRef.current) {
-        logsRef.current.scrollTop = logsRef.current.scrollHeight;
-      }
-  
-      const images = logsRef.current?.getElementsByTagName('img');
-      if (images) {
-        Array.from(images).forEach((img) => {
+    if (logsRef.current) {
+      logsRef.current.scrollTop = logsRef.current.scrollHeight;
+    }
+
+    const images = logsRef.current?.getElementsByTagName("img");
+    if (images) {
+      Array.from(images).forEach((img) => {
         img.onload = () => {
           if (logsRef.current) {
-          logsRef.current.scrollTop = logsRef.current.scrollHeight;
+            logsRef.current.scrollTop = logsRef.current.scrollHeight;
           }
         };
-        });
-      }
-    }, [logs]);
+      });
+    }
+  }, [logs]);
 
   return (
     <div className="bg-[#00AFEF] min-h-screen flex flex-col">
@@ -222,7 +222,14 @@ const TeacherPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm whitespace-pre-line">{log.message}</p>
+                        <p className="font-poppins text-sm">
+                          {log.message.split("\n").map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                        </p>
                       </div>
                       <div className="flex flex-row ml-auto">
                         <img
@@ -260,7 +267,14 @@ const TeacherPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">{log.message}</p>
+                        <p className="font-poppins text-sm">
+                          {log.message.split("\n").map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                        </p>
                       </div>
                     </div>
                   )
