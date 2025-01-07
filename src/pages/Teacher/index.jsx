@@ -222,7 +222,7 @@ const TeacherPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">{log.message}</p>
+                        <p className="font-poppins text-sm whitespace-pre-line">{log.message}</p>
                       </div>
                       <div className="flex flex-row ml-auto">
                         <img
