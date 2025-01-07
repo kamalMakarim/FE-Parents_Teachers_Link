@@ -148,7 +148,7 @@ const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink})
               accept="image/*"
               onChange={handleFileChange}
               disabled={loading}
-              className="hidden"
+              style={{ display: "none" }}
             />
           </div>
 
