@@ -10,6 +10,7 @@ import sendSVG from "../../assets/teacher/send.svg";
 import { formatDistanceToNow, set } from "date-fns";
 import CustomDropdown from "../../../components/CustomDropdown";
 import UploadButton from "../../../components/UploadImage";
+import MessageComponent from "../../../components/MessageComponent";
 import { enUS } from "date-fns/locale";
 
 const ParentPage = () => {
@@ -187,14 +188,7 @@ const ParentPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">
-                          {log.message.split("\n").map((line, index) => (
-                            <React.Fragment key={index}>
-                              {line}
-                              <br />
-                            </React.Fragment>
-                          ))}
-                        </p>
+                        <MessageComponent message={log.message} />
                       </div>
                     </div>
                   ) : (
@@ -224,14 +218,7 @@ const ParentPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">
-                          {log.message.split("\n").map((line, index) => (
-                            <React.Fragment key={index}>
-                              {line}
-                              <br />
-                            </React.Fragment>
-                          ))}
-                        </p>
+                        <MessageComponent message={log.message} />
                       </div>
                     </div>
                   )

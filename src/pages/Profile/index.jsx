@@ -97,10 +97,21 @@ const ProfilePage = () => {
   }
   return (
     <div className="bg-[#00AFEF] min-h-screen flex flex-col">
-      <div className="m-10">
+      <div className="m-10 flex flex-row">
         <h1 className="font-poppins text-white font-bold text-3xl m">
           Edit Profile
         </h1>
+        <div className="flex justify-end ml-auto">
+          <button
+            className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 transition-all"
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = "/login";
+            }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
       <div className="flex flex-col bg-white rounded-t-2xl p-10 flex-grow">
         <h1 className="font-poppins text-black mx-auto text-3xl font-bold">

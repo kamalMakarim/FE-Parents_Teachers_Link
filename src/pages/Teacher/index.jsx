@@ -12,6 +12,7 @@ import sendSVG from "../../assets/teacher/send.svg";
 import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import UploadButton from "../../../components/UploadImage";
+import MessageComponent from "../../../components/MessageComponent";
 import { enUS, se } from "date-fns/locale";
 
 const TeacherPage = () => {
@@ -102,7 +103,7 @@ const TeacherPage = () => {
         withCredentials: true,
       })
       .then((response) => {
-        getStudentLogs();
+        getStudentLogs(selectedStudent);
         setImageLink("");
         setMessage("");
         setLoading(false);
@@ -222,14 +223,7 @@ const TeacherPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">
-                          {log.message.split("\n").map((line, index) => (
-                            <React.Fragment key={index}>
-                              {line}
-                              <br />
-                            </React.Fragment>
-                          ))}
-                        </p>
+                        <MessageComponent message={log.message} />
                       </div>
                       <div className="flex flex-row ml-auto">
                         <img
@@ -267,14 +261,7 @@ const TeacherPage = () => {
                             loading="lazy"
                           />
                         )}
-                        <p className="font-poppins text-sm">
-                          {log.message.split("\n").map((line, index) => (
-                            <React.Fragment key={index}>
-                              {line}
-                              <br />
-                            </React.Fragment>
-                          ))}
-                        </p>
+                        <MessageComponent message={log.message} />
                       </div>
                     </div>
                   )
