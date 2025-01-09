@@ -6,6 +6,7 @@ import Clip from "../src/assets/teacher/clip.svg";
 import leftArrow from "../src/assets/teacher/left_arrow.svg";
 import rightArrow from "../src/assets/teacher/right_arrow.svg";
 import deleteSVG from "../src/assets/teacher/delete.svg";
+import { fi } from "date-fns/locale";
 
 // Modal Styling
 const customStyles = {
@@ -108,6 +109,7 @@ const UploadButton = ({
       });
 
       const fileUrls = await Promise.all(uploadPromises);
+      console.log("Uploaded files:", fileUrls);
 
       setImageLink(fileUrls);
       setIsModalOpen(false);

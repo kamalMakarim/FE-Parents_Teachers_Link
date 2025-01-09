@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UploadButton from "../../../../../components/UploadImage";
+import Trash from "../../../../assets/teacher/delete.svg";
 import { API_URL } from "../../../../../API_URL";
 
 const AddLogPage = () => {
@@ -14,6 +15,7 @@ const AddLogPage = () => {
   const [selectedClass, setSelectedClass] = useState("");
   const [loading, setLoading] = useState(false);
   const [imageLink, setImageLink] = useState("");
+  const [previewImages, setPreviewImages] = useState([]);
 
   useEffect(() => {
     if (localStorage.getItem("class_name") === "Bidang Study TK") {
@@ -81,7 +83,10 @@ const AddLogPage = () => {
       class_name: selectedClass,
     };
     if (imageLink) {
-      logData.image = imageLink.split("/").pop();
+      logData.image = [];
+      imageLink.forEach((link, index) => {
+        logData.image.push(link.split("/").pop());
+      });
     }
 
     await axios
@@ -205,18 +210,40 @@ const AddLogPage = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          {imageLink ? (
-            <div className="flex flex-row">
-              <img
-                src={imageLink}
-                alt="Preview"
-                className="w-max h-[10vh] object-contain rounded-md shadow-md mr-2"
-              />
-              <UploadButton setImageLink={setImageLink} />
+          {previewImages.length > 0 && (
+            <div className="flex flex-row flex-wrap">
+              {previewImages.map((link, index) => (
+                <div
+                  key={index}
+                  className="relative group hover:cursor-pointer"
+                >
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-40 m-2 rounded-md">
+                    <img
+                      src={Trash}
+                      alt="Delete"
+                      className="w-5 h-5 object-cover"
+                      onClick={() => {
+                        setImageLink(imageLink.filter((_, i) => i !== index));
+                        setPreviewImages(
+                          previewImages.filter((_, i) => i !== index)
+                        );
+                      }}
+                    />
+                  </div>
+                  <img
+                    src={link}
+                    alt={`Preview ${index}`}
+                    className="w-max h-[10vh] object-contain rounded-md shadow-md m-2 hover:cursor-pointer hover:opacity-80"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
             </div>
-          ) : (
-            <UploadButton setImageLink={setImageLink} />
           )}
+          <UploadButton
+            setImageLink={setImageLink}
+            setPreviewImages={setPreviewImages}
+          />
           <button
             onClick={handlePostLog}
             className="bg-[#00AFEF] text-white mx-auto py-2 mt-5 rounded-2xl font-bold font-poppins text-2xl hover:scale-105 transition-transform flex-1 w-full"

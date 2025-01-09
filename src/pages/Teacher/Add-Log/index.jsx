@@ -38,11 +38,12 @@ const AddLogPage = () => {
       message: description,
       studentId: forAll ? null : selectedStudent.id,
     };
-    console.log(imageLink);
+    console.log("imageLink", imageLink);
+
     if (imageLink) {
       logData.image = [];
       imageLink.forEach((link, index) => {
-        logData.image[index] = link.split("/").pop();
+        logData.image.push(link.split("/").pop());
       });
     }
 
@@ -66,7 +67,7 @@ const AddLogPage = () => {
   };
 
   return (
-    <div className="bg-[#00AFEF] flex flex-grow flex-row h-full w-full py-10">
+    <div className="bg-[#00AFEF] flex flex-grow flex-row h-screen w-screen py-10">
       <div className="flex flex-grow items-center justify-center">
         <div className="bg-white rounded-3xl p-10 w-full max-w-[700px] flex flex-col">
           <h1 className="font-poppins text-2xl font-bold text-[#00AFEF] w-full text-center">
@@ -146,10 +147,13 @@ const AddLogPage = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          {previewImages.length > 0 ? (
+          {previewImages.length > 0 && (
             <div className="flex flex-row flex-wrap">
               {previewImages.map((link, index) => (
-                <div key={index} className="relative group hover:cursor-pointer">
+                <div
+                  key={index}
+                  className="relative group hover:cursor-pointer"
+                >
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-40 m-2 rounded-md">
                     <img
                       src={Trash}
@@ -157,7 +161,9 @@ const AddLogPage = () => {
                       className="w-5 h-5 object-cover"
                       onClick={() => {
                         setImageLink(imageLink.filter((_, i) => i !== index));
-                        setPreviewImages(previewImages.filter((_, i) => i !== index));
+                        setPreviewImages(
+                          previewImages.filter((_, i) => i !== index)
+                        );
                       }}
                     />
                   </div>
@@ -169,11 +175,12 @@ const AddLogPage = () => {
                   />
                 </div>
               ))}
-              <UploadButton setImageLink={setImageLink} setPreviewImages={setPreviewImages}/>
             </div>
-          ) : (
-            <UploadButton setImageLink={setImageLink} setPreviewImages={setPreviewImages} />
           )}
+          <UploadButton
+            setImageLink={setImageLink}
+            setPreviewImages={setPreviewImages}
+          />
           <button
             onClick={handlePostLog}
             className="bg-[#00AFEF] text-white mx-auto py-2 mt-5 rounded-2xl font-bold font-poppins text-2xl hover:scale-105 transition-transform flex-1 w-full"

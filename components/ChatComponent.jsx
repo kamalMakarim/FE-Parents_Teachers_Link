@@ -4,15 +4,41 @@ import { formatDistanceToNow } from "date-fns";
 import { enUS, se } from "date-fns/locale";
 import MessageComponent from "./MessageComponent";
 import ImageComponent from "./ImageComponent";
+import axios from "axios";
+import { API_URL } from "../API_URL";
 
-
-const ChatComponent = ({ log }) => {
+const ChatComponent = ({ log, setLogs, logs }) => {
   const formatWithoutAbout = (timestamp) => {
     const formatted = formatDistanceToNow(timestamp, {
       addSuffix: true,
       locale: enUS,
     });
     return formatted.replace("about ", "");
+  };
+
+  const handleDeleteChat = async () => {
+    if (!window.confirm("Are you sure you want to delete this chat?")) {
+      return;
+    }
+    await axios
+      .delete(`${API_URL}/chat/deleteChat`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+        params: {
+          chatId: log._id,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.data.message === "Chat deleted") {
+          setLogs(logs.filter((i) => i._id !== log._id));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -33,9 +59,16 @@ const ChatComponent = ({ log }) => {
           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
             {formatWithoutAbout(new Date(log.timestamp))}
           </p>
+          {localStorage.getItem("display_name") === log.writter && (
+            <img
+              src={deleteSVG}
+              alt={log.type}
+              className="w-5 h-5 my-auto ml-2 hover:cursor-pointer"
+              onClick={handleDeleteChat}
+            />
+          )}
         </div>
         <div className="flex flex-row items-center">
-          <img src={deleteSVG} alt={log.type} className="w-5 h-5 my-auto" />
           <div className="flex flex-col">
             {log.image &&
               log.image.map((img, index) => (

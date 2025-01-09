@@ -1,10 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const MessageComponent = ({ message }) => {
   return (
     <div>
-      <p className="font-poppins text-sm">
+      {message && (
+        <p className="font-poppins text-sm">
         {message.split("\n").map((line, index) => (
           <React.Fragment key={index}>
             {line.split(/(https?:\/\/[^\s]+)/g).map((part, i) => {
@@ -28,12 +28,11 @@ const MessageComponent = ({ message }) => {
           </React.Fragment>
         ))}
       </p>
+      )}
+      
     </div>
   );
 };
 
-MessageComponent.propTypes = {
-  message: PropTypes.string.isRequired,
-};
 
 export default MessageComponent;

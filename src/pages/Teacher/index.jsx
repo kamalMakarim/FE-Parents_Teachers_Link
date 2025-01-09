@@ -3,19 +3,14 @@ import axios from "axios";
 import CustomDropdown from "../../../components/CustomDropdown";
 import addSVG from "../../assets/teacher/add.svg";
 import { API_URL } from "../../../API_URL";
-import incident from "../../assets/log/incident.svg";
-import report from "../../assets/log/report.svg";
-import praise from "../../assets/log/praise.svg";
 import deleteSVG from "../../assets/teacher/delete.svg";
 import profileSVG from "../../assets/teacher/profile.svg";
 import sendSVG from "../../assets/teacher/send.svg";
-import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import UploadButton from "../../../components/UploadImage";
-import MessageComponent from "../../../components/MessageComponent";
-import ImageComponent from "../../../components/ImageComponent";
 import ChatComponent from "../../../components/ChatComponent";
-import { enUS, se } from "date-fns/locale";
+import LogComponent from "../../../components/LogComponent";
+import { enUS, fi, se } from "date-fns/locale";
 
 const TeacherPage = () => {
   const [students, setStudents] = useState([]);
@@ -25,13 +20,15 @@ const TeacherPage = () => {
   const [logs, setLogs] = useState([]);
   const [imageLink, setImageLink] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
+  let handleScrollUpRef = useRef(false);
+  const logsRef = useRef(null);
 
   useEffect(() => {
     getStudentClass();
   }, []);
 
   useEffect(() => {
-    getStudentLogs(selectedStudent);
+    getStudentLogs(new Date().getTime());
   }, [selectedStudent]);
 
   const getStudentClass = async () => {
@@ -54,17 +51,73 @@ const TeacherPage = () => {
       });
   };
 
-  const getStudentLogs = async (student) => {
-    setLoading(true);
+  const handleScroll = async () => {
+    handleScrollUpRef.current = true;
+    if (logsRef.current.scrollTop === 0) {
+      const oldestLog = logs.reduce((oldest, log) => {
+        return !oldest || new Date(log.timestamp) < new Date(oldest.timestamp)
+          ? log
+          : oldest;
+      }, null);
+      const timestamp = oldestLog
+        ? new Date(oldestLog.timestamp).getTime()
+        : new Date().getTime();
+      await getStudentLogs(timestamp);
+    }
+  };
+
+  useEffect(() => {
+    if (logsRef.current) {
+      logsRef.current.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (logsRef.current) {
+        logsRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [logs]);
+
+  useEffect(() => {
+    if (!handleScrollUpRef.current) {
+      if (logsRef.current) {
+        logsRef.current.scrollTop = logsRef.current.scrollHeight;
+      }
+
+      const images = logsRef.current?.getElementsByTagName("img");
+      if (images) {
+        Array.from(images).forEach((img) => {
+          img.onload = () => {
+            if (logsRef.current) {
+              logsRef.current.scrollTop = logsRef.current.scrollHeight;
+            }
+          };
+        });
+      }
+    }
+  }, [logs]);
+
+  const getStudentLogs = async (timestamp) => {
+    if (logs.length == 0) {
+      setLoading(true);
+    }
     await axios
-      .post(`${API_URL}/log/getLogOfStudent`, student, {
+      .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
         headers: {
           "Content-Type": "application/json",
         },
         withCredentials: true,
+        params: {
+          timestamp: timestamp,
+        },
       })
-      .then((response) => {
-        setLogs(response.data);
+      .then(async (response) => {
+        const newLogs = response.data.filter(
+          (log) => !logs.some((existingLog) => existingLog._id === log._id)
+        );
+        const sortedLogs = [...logs, ...newLogs].sort(
+          (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+        );
+        setLogs(sortedLogs);
         setLoading(false);
       })
       .catch((error) => {
@@ -73,20 +126,15 @@ const TeacherPage = () => {
   };
 
   const handleChange = (e) => {
+    handleScrollUpRef.current = false;
     let student = students.find((s) => s.id === e.target.value);
     student.notification = 0;
     setSelectedStudent(student);
-  };
-
-  const formatWithoutAbout = (timestamp) => {
-    const formatted = formatDistanceToNow(timestamp, {
-      addSuffix: true,
-      locale: enUS,
-    });
-    return formatted.replace("about ", "");
+    setLogs([]);
   };
 
   const handleSendChat = async () => {
+    handleScrollUpRef.current = false;
     setLoading(true);
     let chatData = {
       message: message,
@@ -110,69 +158,17 @@ const TeacherPage = () => {
         withCredentials: true,
       })
       .then((response) => {
-        getStudentLogs(selectedStudent);
+        setLogs([...logs, response.data.data]);
         setImageLink([]);
         setPreviewImages([]);
         setMessage("");
         setLoading(false);
+        scrollDown();
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  const handleDeleteLog = async (log) => {
-    setLoading(true);
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this log?"
-    );
-    let for_personal = false;
-    if (log.studentId) {
-      for_personal = true;
-    }
-    if (confirmDelete) {
-      await axios
-        .delete(`${API_URL}/log/delete`, {
-          params: {
-            logId: log._id,
-            personal: for_personal,
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        })
-        .then((response) => {
-          if (response.data.message === "Log deleted") {
-            window.location.reload();
-          } else {
-            console.log(response.data.message);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
-
-  const logsRef = useRef(null);
-
-  useEffect(() => {
-    if (logsRef.current) {
-      logsRef.current.scrollTop = logsRef.current.scrollHeight;
-    }
-
-    const images = logsRef.current?.getElementsByTagName("img");
-    if (images) {
-      Array.from(images).forEach((img) => {
-        img.onload = () => {
-          if (logsRef.current) {
-            logsRef.current.scrollTop = logsRef.current.scrollHeight;
-          }
-        };
-      });
-    }
-  }, [logs]);
 
   return (
     <div className="bg-[#00AFEF] min-h-screen flex flex-col">
@@ -196,50 +192,21 @@ const TeacherPage = () => {
             >
               {logs.length > 0 &&
                 logs.map((log) =>
-                  log.type ? (
-                    <div
+                  log.type !== "chat" ? (
+                    <LogComponent
+                      log={log}
                       key={log._id}
-                      className="bg-gray-200 rounded-2xl flex flex-row my-3 items-center p-2 transition-all"
-                    >
-                      <img
-                        src={
-                          log.type === "Report"
-                            ? report
-                            : log.type === "Praise"
-                            ? praise
-                            : log.type === "Incident"
-                            ? incident
-                            : announcement
-                        }
-                        alt={log.type}
-                        className="w-10 h-10 mb-auto"
-                      />
-                      <div className="flex flex-col ml-2">
-                        <div className="flex flex-row items-center">
-                          <p className="font-poppins font-bold text-lg">
-                            {log.type}
-                          </p>
-                          <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {formatWithoutAbout(new Date(log.timestamp))}
-                          </p>
-                        </div>
-                        {log.image &&
-                          log.image.map((img, index) => (
-                            <ImageComponent key={index} src={img} alt="image" />
-                          ))}
-                        <MessageComponent message={log.message} />
-                      </div>
-                      <div className="flex flex-row ml-auto">
-                        <img
-                          src={deleteSVG}
-                          alt="Delete"
-                          className="w-5 h-5 ml-2 hover:cursor-pointer"
-                          onClick={() => handleDeleteLog(log)}
-                        />
-                      </div>
-                    </div>
+                      logs={logs}
+                      setLoading={setLoading}
+                      setLogs={setLogs}
+                    />
                   ) : (
-                    <ChatComponent key={log._id} log={log} />
+                    <ChatComponent
+                      log={log}
+                      key={log._id}
+                      setLogs={setLogs}
+                      logs={logs}
+                    />
                   )
                 )}
             </div>

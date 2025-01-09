@@ -21,6 +21,7 @@ return (
             alt={alt}
             onClick={handleOpen}
             className="image-thumbnail"
+            loading="lazy"
         />
         
         <Modal
@@ -42,6 +43,7 @@ return (
                         src={src}
                         alt={alt}
                         className="modal-image"
+                        loading="eager"
                     />
                 </div>
             </div>
