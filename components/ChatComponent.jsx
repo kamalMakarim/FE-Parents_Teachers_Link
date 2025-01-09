@@ -44,9 +44,7 @@ const ChatComponent = ({ log, setLogs, logs }) => {
   return (
     <div
       key={log._id}
-      className={
-        "rounded-2xl flex flex-row items-center p-2 max-w-[75vw]"
-      }
+      className={"rounded-2xl flex flex-row items-center p-2 max-w-[75vw]"}
       style={{
         width: "fit-content",
         maxWidth: "75vw",
@@ -56,14 +54,10 @@ const ChatComponent = ({ log, setLogs, logs }) => {
             : "#e5e7eb"
         }`,
         marginLeft: `${
-          localStorage.getItem("display_name") === log.writter
-            ? "auto"
-            : "0"
+          localStorage.getItem("display_name") === log.writter ? "auto" : "0"
         }`,
         marginRight: `${
-          localStorage.getItem("display_name") === log.writter
-            ? "0"
-            : "auto"
+          localStorage.getItem("display_name") === log.writter ? "0" : "auto"
         }`,
         marginTop: "0.5rem",
         marginBottom: "0.5rem",
@@ -77,10 +71,19 @@ const ChatComponent = ({ log, setLogs, logs }) => {
           <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
             {formatWithoutAbout(new Date(log.timestamp))}
           </p>
-          <img src={deleteSVG} alt={log.type} className="w-5 h-5 my-auto hover:cursor-pointer ml-2" onClick={handleDeleteChat}/>
+          <img
+            src={deleteSVG}
+            alt={log.type}
+            className="w-5 h-5 my-auto hover:cursor-pointer ml-2"
+            onClick={handleDeleteChat}
+            style={
+              localStorage.getItem("display_name") === log.writter
+                ? {}
+                : { display: "none" }
+            }
+          />
         </div>
         <div className="flex flex-row items-center">
-          
           <div className="flex flex-col">
             {log.image &&
               log.image.map((img, index) => (
