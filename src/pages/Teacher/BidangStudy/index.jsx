@@ -263,14 +263,15 @@ const TeacherPage = () => {
                             {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
-                        {log.image && (
+                        {log.image && log.image.map((img, index) => (
                           <img
-                            src={`${log.image}`}
+                            key={index}
+                            src={`${img}`}
                             alt="image"
                             className="w-max rounded-lg my-2 max-h-[50vh]"
                             loading="lazy"
                           />
-                        )}
+                        ))}
                         <MessageComponent message={log.message} />
                       </div>
                       <div className="flex flex-row ml-auto">
@@ -301,14 +302,15 @@ const TeacherPage = () => {
                             {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
-                        {log.image && (
+                        {log.image && log.image.map((img, index) => (
                           <img
-                            src={`${log.image}`}
+                            key={index}
+                            src={`${img}`}
                             alt="image"
                             className="w-max rounded-lg my-2 max-h-[50vh]"
                             loading="lazy"
                           />
-                        )}
+                        ))}
                         <MessageComponent message={log.message} />
                       </div>
                     </div>

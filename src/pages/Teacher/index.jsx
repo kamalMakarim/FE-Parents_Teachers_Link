@@ -13,6 +13,8 @@ import announcement from "../../assets/log/announcement.svg";
 import { formatDistanceToNow } from "date-fns";
 import UploadButton from "../../../components/UploadImage";
 import MessageComponent from "../../../components/MessageComponent";
+import ImageComponent from "../../../components/ImageComponent";
+import ChatComponent from "../../../components/ChatComponent";
 import { enUS, se } from "date-fns/locale";
 
 const TeacherPage = () => {
@@ -21,7 +23,8 @@ const TeacherPage = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [logs, setLogs] = useState([]);
-  const [imageLink, setImageLink] = useState("");
+  const [imageLink, setImageLink] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
 
   useEffect(() => {
     getStudentClass();
@@ -91,7 +94,11 @@ const TeacherPage = () => {
     };
 
     if (imageLink) {
-      chatData.image = imageLink.split("/").pop();
+      chatData.image = [];
+      //chatData.image = imageLink.split("/").pop();
+      imageLink.forEach((link, index) => {
+        chatData.image[index] = link.split("/").pop();
+      });
     }
     console.log(chatData);
 
@@ -104,7 +111,8 @@ const TeacherPage = () => {
       })
       .then((response) => {
         getStudentLogs(selectedStudent);
-        setImageLink("");
+        setImageLink([]);
+        setPreviewImages([]);
         setMessage("");
         setLoading(false);
       })
@@ -215,14 +223,10 @@ const TeacherPage = () => {
                             {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
-                        {log.image && (
-                          <img
-                            src={`${log.image}`}
-                            alt="image"
-                            className="w-max rounded-lg my-2 max-h-[50vh]"
-                            loading="lazy"
-                          />
-                        )}
+                        {log.image &&
+                          log.image.map((img, index) => (
+                            <ImageComponent key={index} src={img} alt="image" />
+                          ))}
                         <MessageComponent message={log.message} />
                       </div>
                       <div className="flex flex-row ml-auto">
@@ -235,35 +239,7 @@ const TeacherPage = () => {
                       </div>
                     </div>
                   ) : (
-                    <div
-                      key={log._id}
-                      className={`rounded-2xl flex flex-row my-3 items-center p-2 max-w-[75vw] ${
-                        localStorage.getItem("display_name") === log.writter
-                          ? "ml-auto bg-green-200"
-                          : "mr-auto bg-gray-200"
-                      }`}
-                      style={{ width: "fit-content", maxWidth: "75vw" }}
-                    >
-                      <div className={`flex flex-col`}>
-                        <div className="flex flex-row items-center">
-                          <p className="font-poppins font-semibold text-xs md:text-base">
-                            {log.writter}
-                          </p>
-                          <p className="font-poppin text-xs ml-2 font-bold text-gray-400">
-                            {formatWithoutAbout(new Date(log.timestamp))}
-                          </p>
-                        </div>
-                        {log.image && (
-                          <img
-                            src={`${log.image}`}
-                            alt="image"
-                            className="w-max rounded-lg my-2 max-h-[50vh]"
-                            loading="lazy"
-                          />
-                        )}
-                        <MessageComponent message={log.message} />
-                      </div>
-                    </div>
+                    <ChatComponent key={log._id} log={log} />
                   )
                 )}
             </div>
@@ -273,13 +249,34 @@ const TeacherPage = () => {
             <div className="w-16 h-16 border-4 border-[#00AFEF] border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
-        {imageLink && (
-          <img
-            src={imageLink}
-            alt="Preview"
-            className="w-max h-[10vh] object-contain rounded-md shadow-md"
-            loading="lazy"
-          />
+        {previewImages.length > 0 && (
+          <div className="flex flex-row flex-wrap">
+            {previewImages.map((link, index) => (
+              <div key={index} className="relative group hover:cursor-pointer">
+                <div
+                  className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-40 m-2 rounded-md"
+                  onClick={() => {
+                    setImageLink(imageLink.filter((_, i) => i !== index));
+                    setPreviewImages(
+                      previewImages.filter((_, i) => i !== index)
+                    );
+                  }}
+                >
+                  <img
+                    src={deleteSVG}
+                    alt="Delete"
+                    className="w-5 h-5 object-cover"
+                  />
+                </div>
+                <img
+                  src={link}
+                  alt={`Preview ${index}`}
+                  className="w-max h-[10vh] object-contain rounded-md shadow-md m-2 hover:cursor-pointer hover:opacity-80"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
         )}
         <div className="flex flex-row mt-2">
           <textarea
@@ -288,7 +285,10 @@ const TeacherPage = () => {
             onChange={(e) => setMessage(e.target.value)}
             value={message}
           ></textarea>
-          <UploadButton setImageLink={setImageLink} />
+          <UploadButton
+            setImageLink={setImageLink}
+            setPreviewImages={setPreviewImages}
+          />
           <button
             className="ml-2 px-4 py-2 bg-[#00AFEF] text-white rounded-md hover:bg-[#017aa7]"
             onClick={handleSendChat}

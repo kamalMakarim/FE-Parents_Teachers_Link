@@ -1,8 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import Modal from "react-modal";
 import Clip from "../src/assets/teacher/clip.svg";
+import leftArrow from "../src/assets/teacher/left_arrow.svg";
+import rightArrow from "../src/assets/teacher/right_arrow.svg";
+import deleteSVG from "../src/assets/teacher/delete.svg";
 
 // Modal Styling
 const customStyles = {
@@ -28,18 +31,24 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink}) => {
+const UploadButton = ({
+  maxSizeMB = 0.5,
+  maxWidthOrHeight = 1920,
+  setImageLink,
+  setPreviewImages,
+}) => {
   const [uploadStatus, setUploadStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrls, setPreviewUrls] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+    const files = event.target.files;
 
-    if (!file) {
-      setUploadStatus("No file selected.");
+    if (!files || files.length === 0) {
+      setUploadStatus("No files selected.");
       return;
     }
 
@@ -47,13 +56,20 @@ const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink})
       setLoading(true);
       setUploadStatus("");
 
-      // Compress the image
-      const compressedFile = await compressImage(file);
-      setSelectedFile(compressedFile);
+      // Compress images and generate preview URLs
+      const compressedFiles = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const compressed = await compressImage(file);
+          return compressed;
+        })
+      );
 
-      // Create a preview URL for the selected image
-      const preview = URL.createObjectURL(compressedFile);
-      setPreviewUrl(preview);
+      const previews = compressedFiles.map((file) => URL.createObjectURL(file));
+
+      setSelectedFiles(compressedFiles);
+      setPreviewImages(previews);
+      setPreviewUrls(previews);
+      setCurrentIndex(0); // Reset carousel index
     } catch (error) {
       console.error("Compression error:", error);
       setUploadStatus("File compression failed. Please try again.");
@@ -63,8 +79,8 @@ const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink})
   };
 
   const handleSubmit = async () => {
-    if (!selectedFile) {
-      setUploadStatus("No file selected for upload.");
+    if (!selectedFiles || selectedFiles.length === 0) {
+      setUploadStatus("No files selected for upload.");
       return;
     }
 
@@ -72,24 +88,28 @@ const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink})
       setLoading(true);
       setUploadStatus("");
 
-      // Create form data for upload
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+      // Upload the compressed files one by one
+      const uploadPromises = selectedFiles.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      // Upload the compressed file
-      const response = await axios.post(
-        "https://bukom-zipline.9retes.easypanel.host/api/upload",
-        formData,
-        {
-          headers: {
-            Authorization: `naPdbozWdkOTku6cwhYJXIxz.MTczNTk3NjUyMzQ1Mw`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+        const response = await axios.post(
+          "https://binekas-zipline.tagj8z.easypanel.host/api/upload",
+          formData,
+          {
+            headers: {
+              Authorization: `yVOt7FVxipxZtPUoWAsb7Z9i.MTczNjM4ODg3NzUwNw`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-      const fileUrl = await response.data.files[0];
-      setImageLink(fileUrl);
+        return response.data.files[0];
+      });
+
+      const fileUrls = await Promise.all(uploadPromises);
+
+      setImageLink(fileUrls);
       setIsModalOpen(false);
     } catch (error) {
       console.error("Upload error:", error);
@@ -109,6 +129,18 @@ const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink})
     return await imageCompression(file, options);
   };
 
+  const handleNext = () => {
+    if (currentIndex < previewUrls.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
   return (
     <div className="relative flex flex-col items-center">
       <button
@@ -121,65 +153,81 @@ const UploadButton = ({ maxSizeMB = 0.5, maxWidthOrHeight = 1920, setImageLink})
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         style={customStyles}
-        contentLabel="Upload Image Modal"
       >
-        <button
-          onClick={() => setIsModalOpen(false)}
-          className="absolute top-2 right-2 text-gray-600 hover:text-red-600 transition-transform text-xl font-bold"
-        >
-          &times;
-        </button>
-        <div className="flex flex-col items-center">
-          <h2 className="text-lg font-bold mb-4 text-gray-800">Upload Image</h2>
+        <h2 className="text-lg font-bold mb-4">Upload Images</h2>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleFileChange}
+          className="mb-4"
+        />
 
-          {/* File Input Section */}
-          <div className="w-full mb-4">
-            <label
-              htmlFor="file-input"
-              className="block w-full py-3 border-2 border-dashed border-gray-300 text-center rounded-md cursor-pointer hover:border-gray-500"
-            >
-              {selectedFile
-                ? "File ready for upload"
-                : "Click to upload an image"}
-            </label>
-            <input
-              type="file"
-              id="file-input"
-              accept="image/*"
-              onChange={handleFileChange}
-              disabled={loading}
-              style={{ display: "none" }}
-            />
-          </div>
-
-          {/* Preview Section */}
-          {previewUrl && (
-            <div className="mb-4">
+        {loading && <p>Compressing images...</p>}
+        {uploadStatus && <p className="text-red-500">{uploadStatus}</p>}
+        {previewUrls.length > 0 && (
+          <div className="carousel">
+            <div className="image-container">
               <img
-                src={previewUrl}
-                alt="Preview"
-                className="max-w-full h-auto rounded-md shadow-md"
-                loading="lazy"
+                src={previewUrls[currentIndex]}
+                alt={`Preview ${currentIndex + 1}`}
+                className="w-full h-auto"
               />
             </div>
-          )}
-
-          {/* Upload Status */}
-          {uploadStatus && (
-            <p className="mt-4 text-sm text-gray-700 text-center">
-              {uploadStatus}
-            </p>
-          )}
-
-          {/* Submit Button */}
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md mt-2"
-            disabled={loading}
-          >
-            {loading ? "Uploading..." : "Submit"}
-          </button>
-        </div>
+            <div className="carousel-controls flex justify-between mt-4">
+              <button
+                onClick={handlePrevious}
+                disabled={currentIndex === 0}
+                className=""
+              >
+                <img src={leftArrow} alt="Next" className="w-4 h-4" />
+              </button>
+              <img
+                onClick={() => {
+                  const newPreviewUrls = previewUrls.filter(
+                    (_, index) => index !== currentIndex
+                  );
+                  const newSelectedFiles = selectedFiles.filter(
+                    (_, index) => index !== currentIndex
+                  );
+                  setPreviewUrls(newPreviewUrls);
+                  setSelectedFiles(newSelectedFiles);
+                  setPreviewImages(newPreviewUrls);
+                  setCurrentIndex((prevIndex) =>
+                    prevIndex > 0 ? prevIndex - 1 : 0
+                  );
+                }}
+                className="w-5 h-5 cursor-pointer"
+                src={deleteSVG}
+              ></img>
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === previewUrls.length - 1}
+                className=""
+              >
+                <img src={rightArrow} alt="Next" className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="bg-[#00AFEF] text-white mt-4 rounded-md hover:bg-[#017aa7] px-4 py-2"
+        >
+          {loading ? "Uploading..." : "Upload"}
+        </button>
+        <button
+          onClick={() => {
+            setIsModalOpen(false);
+            setPreviewUrls([]);
+            setSelectedFiles([]);
+            setPreviewImages([]);
+          }}
+          className="bg-red-500 text-white mt-4 rounded-md hover:bg-red-700 px-4 py-2"
+        >
+          Close
+        </button>
       </Modal>
     </div>
   );

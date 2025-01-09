@@ -12,13 +12,13 @@ const MessageComponent = ({ message }) => {
               if (/https?:\/\/[^\s]+/.test(part)) {
                 return (
                   <a
-                    key={i}
-                    href={part}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
+                  key={i}
+                  href={part}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "blue"}}
                   >
-                    {part}
+                  {part}
                   </a>
                 );
               }

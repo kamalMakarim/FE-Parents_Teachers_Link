@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UploadButton from "../../../../components/UploadImage";
+import Trash from "../../../assets/teacher/delete.svg";
 import { API_URL } from "../../../../API_URL";
 
 const AddLogPage = () => {
@@ -10,13 +11,14 @@ const AddLogPage = () => {
   const [postType, setPostType] = useState("Report");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
-  const [imageLink, setImageLink] = useState("");
+  const [imageLink, setImageLink] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
 
   useEffect(() => {
     axios
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         withCredentials: true,
       })
@@ -30,27 +32,27 @@ const AddLogPage = () => {
       });
   }, []);
 
-  const handlePostLog = async() => {
+  const handlePostLog = async () => {
     let logData = {
       type: postType,
       message: description,
       studentId: forAll ? null : selectedStudent.id,
     };
-    if(imageLink){
-      logData.image = imageLink.split("/").pop();
+    console.log(imageLink);
+    if (imageLink) {
+      logData.image = [];
+      imageLink.forEach((link, index) => {
+        logData.image[index] = link.split("/").pop();
+      });
     }
 
     await axios
-      .post(
-        `${API_URL}/log/add`,
-        logData,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          withCredentials: true,
-        }
-      )
+      .post(`${API_URL}/log/add`, logData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((response) => {
         setMessage(response.data.message);
         if (response.data.message == "Log created") {
@@ -63,9 +65,8 @@ const AddLogPage = () => {
       });
   };
 
-
   return (
-    <div className="bg-[#00AFEF] flex flex-grow flex-row h-screen w-screen p-10">
+    <div className="bg-[#00AFEF] flex flex-grow flex-row h-full w-full py-10">
       <div className="flex flex-grow items-center justify-center">
         <div className="bg-white rounded-3xl p-10 w-full max-w-[700px] flex flex-col">
           <h1 className="font-poppins text-2xl font-bold text-[#00AFEF] w-full text-center">
@@ -145,18 +146,34 @@ const AddLogPage = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          {imageLink ? (
-            <div className="flex flex-row">
-            <img
-              src={imageLink}
-              alt="Preview"
-              className="w-max h-[10vh] object-contain rounded-md shadow-md mr-2"
-              loading="lazy"
-            />
-            <UploadButton setImageLink={setImageLink} />
+          {previewImages.length > 0 ? (
+            <div className="flex flex-row flex-wrap">
+              {previewImages.map((link, index) => (
+                <div key={index} className="relative group hover:cursor-pointer">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-40 m-2 rounded-md">
+                    <img
+                      src={Trash}
+                      alt="Delete"
+                      className="w-5 h-5 object-cover"
+                      onClick={() => {
+                        setImageLink(imageLink.filter((_, i) => i !== index));
+                        setPreviewImages(previewImages.filter((_, i) => i !== index));
+                      }}
+                    />
+                  </div>
+                  <img
+                    src={link}
+                    alt={`Preview ${index}`}
+                    className="w-max h-[10vh] object-contain rounded-md shadow-md m-2 hover:cursor-pointer hover:opacity-80"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+              <UploadButton setImageLink={setImageLink} setPreviewImages={setPreviewImages}/>
             </div>
-          ):
-          <UploadButton setImageLink={setImageLink} />}
+          ) : (
+            <UploadButton setImageLink={setImageLink} setPreviewImages={setPreviewImages} />
+          )}
           <button
             onClick={handlePostLog}
             className="bg-[#00AFEF] text-white mx-auto py-2 mt-5 rounded-2xl font-bold font-poppins text-2xl hover:scale-105 transition-transform flex-1 w-full"

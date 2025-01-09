@@ -180,14 +180,16 @@ const ParentPage = () => {
                             {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
-                        {log.image && (
-                          <img
-                            src={`${log.image}`}
-                            alt="image"
-                            className="w-max rounded-lg my-2 max-h-[50vh]"
-                            loading="lazy"
-                          />
-                        )}
+                        {log.image &&
+                          log.image.map((img, index) => (
+                            <img
+                              key={index}
+                              src={`${img}`}
+                              alt="image"
+                              className="w-max rounded-lg my-2 max-h-[50vh]"
+                              loading="lazy"
+                            />
+                          ))}
                         <MessageComponent message={log.message} />
                       </div>
                     </div>
@@ -210,14 +212,16 @@ const ParentPage = () => {
                             {formatWithoutAbout(new Date(log.timestamp))}
                           </p>
                         </div>
-                        {log.image && (
-                          <img
-                            src={`${log.image}`}
-                            alt="Image"
-                            className="w-max rounded-lg my-2 max-h-[50vh]"
-                            loading="lazy"
-                          />
-                        )}
+                        {log.image &&
+                          log.image.map((img, index) => (
+                            <img
+                              key={index}
+                              src={`${img}`}
+                              alt="image"
+                              className="w-max rounded-lg my-2 max-h-[50vh]"
+                              loading="lazy"
+                            />
+                          ))}
                         <MessageComponent message={log.message} />
                       </div>
                     </div>
