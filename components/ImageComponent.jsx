@@ -4,7 +4,7 @@ import Modal from "react-modal";
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
-const ImageComponent = ({ src, alt = "Image" }) => {
+const ImageComponent = ({ src }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -18,7 +18,7 @@ return (
     <div>
         <img
             src={src}
-            alt={alt}
+            alt= "Image"
             onClick={handleOpen}
             className="image-thumbnail"
             loading="lazy"
@@ -41,7 +41,7 @@ return (
                 <div className="modal-image-container">
                     <img
                         src={src}
-                        alt={alt}
+                        alt= "Image"
                         className="modal-image"
                         loading="eager"
                     />
