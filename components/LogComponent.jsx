@@ -94,7 +94,7 @@ const LogComponent = ({ log , logs, setLoading, setLogs}) => {
         className="w-5 h-5 hover:cursor-pointer ml-auto"
         onClick={() => handleDeleteLog()}
         style={
-          localStorage.getItem("display_name") === log.writter
+          localStorage.getItem("role") == "teacher"
             ? {}
             : { display: "none" }
         }
