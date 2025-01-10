@@ -74,7 +74,7 @@ return (
                 justify-content: center;
                 align-items: center;
                 max-width: 80vw;
-                max-height: 95vh;
+                max-height: 85vh;
                 position: relative;
             }
 
@@ -91,7 +91,7 @@ return (
                 justify-content: center;
                 align-items: center;
                 max-width: 80vw;
-                height: 90vh;
+                height: 80vh;
             }
 
             /* Image Style */
