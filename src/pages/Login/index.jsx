@@ -29,6 +29,7 @@ const LoginPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            "Origin": VITE_APP_URL,
           },
           withCredentials: true,
         }
