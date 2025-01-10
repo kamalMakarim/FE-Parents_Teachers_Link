@@ -77,7 +77,7 @@ const ChatComponent = ({ log, setLogs, logs }) => {
             className="w-5 h-5 my-auto hover:cursor-pointer ml-2"
             onClick={handleDeleteChat}
             style={
-              localStorage.getItem("role") === "teacher"
+              localStorage.getItem("display_name") === log.writter 
                 ? {}
                 : { display: "none" }
             }
