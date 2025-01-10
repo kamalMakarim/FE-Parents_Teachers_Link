@@ -93,6 +93,11 @@ const LogComponent = ({ log , logs, setLoading, setLogs}) => {
         alt="Delete"
         className="w-5 h-5 hover:cursor-pointer ml-auto"
         onClick={() => handleDeleteLog()}
+        style={
+          localStorage.getItem("display_name") === log.writter
+            ? {}
+            : { display: "none" }
+        }
       />
     </div>
   );
