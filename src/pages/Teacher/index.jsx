@@ -158,11 +158,11 @@ const TeacherPage = () => {
         withCredentials: true,
       })
       .then((response) => {
+        setLoading(false);
         setLogs([...logs, response.data.data]);
         setImageLink([]);
         setPreviewImages([]);
         setMessage("");
-        setLoading(false);
         scrollDown();
       })
       .catch((error) => {
