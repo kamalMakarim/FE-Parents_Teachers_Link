@@ -58,7 +58,8 @@ const LogComponent = ({ log , logs, setLoading, setLogs}) => {
   return (
     <div
       key={log._id}
-      className="bg-gray-200 rounded-2xl flex flex-row my-3 items-center p-2 transition-all"
+      className="bg-gray-200 rounded-2xl flex flex-row items-center p-2 transition-all"
+      style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
     >
       <img
         src={
@@ -71,7 +72,8 @@ const LogComponent = ({ log , logs, setLoading, setLogs}) => {
             : announcement
         }
         alt={log.type}
-        className="w-10 h-10 mb-auto"
+        className="w-10 h-10"
+        style={{ marginBottom: "auto" }}
       />
       <div className="flex flex-col ml-2">
         <div className="flex flex-row items-center">
