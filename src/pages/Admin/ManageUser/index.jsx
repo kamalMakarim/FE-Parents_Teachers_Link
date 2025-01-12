@@ -14,7 +14,7 @@ const ManageUserPage = () => {
   const [selectedUser, setSelectedUser] = useState();
 
   useEffect(() => {
-    setLoading(true);
+    //setLoading(true);
     axios
       .get(`${API_URL}/user/all`, {
         headers: {
@@ -42,7 +42,7 @@ const ManageUserPage = () => {
   };
 
   const handleDelete = async(username) => {
-    setLoading(true);
+    //setLoading(true);
 
     await axios
       .delete(`${API_URL}/user/delete/${username}`, {

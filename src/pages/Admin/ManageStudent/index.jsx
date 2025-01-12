@@ -41,7 +41,7 @@ const ManageStudentPage = () => {
   ];
 
   useEffect(() => {
-    setLoading(true);
+    //setLoading(true);
     axios
       .get(`${API_URL}/student/all`, {
         headers: {
@@ -69,7 +69,7 @@ const ManageStudentPage = () => {
   };
 
   const handleDelete = async (studentToDelete) => {
-    setLoading(true);
+    //setLoading(true);
     await axios
       .delete(`${API_URL}/student/delete/${studentToDelete.id}`, {
         headers: {

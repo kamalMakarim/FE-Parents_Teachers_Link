@@ -59,7 +59,7 @@ const AddLogPage = () => {
   }, [selectedClass]);
 
   const getStudentClass = async () => {
-    setLoading(true);
+    //setLoading(true);
     await axios
       .get(`${API_URL}/student/getStudentClass`, {
         params: { class_name: selectedClass },

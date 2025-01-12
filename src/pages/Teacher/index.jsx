@@ -32,7 +32,7 @@ const TeacherPage = () => {
   }, [selectedStudent]);
 
   const getStudentClass = async () => {
-    setLoading(true);
+    //setLoading(true);
     await axios
       .get(`${API_URL}/student/getStudentClass`, {
         headers: {
@@ -98,7 +98,7 @@ const TeacherPage = () => {
 
   const getStudentLogs = async (timestamp) => {
     if (logs.length == 0) {
-      setLoading(true);
+      //setLoading(true);
     }
     await axios
       .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
@@ -135,7 +135,7 @@ const TeacherPage = () => {
 
   const handleSendChat = async () => {
     handleScrollUpRef.current = false;
-    setLoading(true);
+    //setLoading(true);
     let chatData = {
       message: message,
       studentId: selectedStudent.id,

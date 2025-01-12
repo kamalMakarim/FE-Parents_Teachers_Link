@@ -21,7 +21,7 @@ const LogComponent = ({ log , logs, setLoading, setLogs}) => {
   };
 
   const handleDeleteLog = async () => {
-    setLoading(true);
+    //setLoading(true);
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this log?"
     );

@@ -67,7 +67,7 @@ const TeacherPage = () => {
   }, [selectedStudent]);
 
   const getStudentClass = async () => {
-    setLoading(true);
+    //setLoading(true);
     await axios
       .get(`${API_URL}/student/getStudentClass`, {
         params: { class_name: selectedClass },
@@ -131,7 +131,7 @@ const TeacherPage = () => {
 
   const getStudentLogs = async (timestamp) => {
     if (logs.length == 0) {
-      setLoading(true);
+      //setLoading(true);
     }
     await axios
       .post(`${API_URL}/log/getLogOfStudent`, selectedStudent, {
@@ -168,7 +168,7 @@ const TeacherPage = () => {
 
   const handleSendChat = async () => {
     handleScrollUpRef.current = false;
-    setLoading(true);
+    //setLoading(true);
     let chatData = {
       message: message,
       studentId: selectedStudent.id,
@@ -204,7 +204,7 @@ const TeacherPage = () => {
   };
 
   const handleDeleteLog = async (log) => {
-    setLoading(true);
+    //setLoading(true);
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this log?"
     );

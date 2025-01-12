@@ -17,7 +17,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async(e) => {
-    setLoading(true);
+    //setLoading(true);
     e.preventDefault();
     await axios
       .post(

@@ -54,7 +54,7 @@ const UploadButton = ({
     }
 
     try {
-      setLoading(true);
+      //setLoading(true);
       setUploadStatus("");
 
       // Compress images and generate preview URLs
@@ -86,7 +86,7 @@ const UploadButton = ({
     }
 
     try {
-      setLoading(true);
+      //setLoading(true);
       setUploadStatus("");
 
       // Upload the compressed files one by one
