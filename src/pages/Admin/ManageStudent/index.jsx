@@ -20,7 +20,7 @@ const ManageStudentPage = () => {
     "Green Maher",
     "Yellow Maher",
     "Yellow Motekar",
-    "Yellow Wanter",
+    "Yellow Wanter",
     "Gumujeng",
     "Someah",
     "Rancage",
