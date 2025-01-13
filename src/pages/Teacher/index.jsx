@@ -111,7 +111,7 @@ const TeacherPage = () => {
         },
       })
       .then(async (response) => {
-        const newLogs = response.data.filter(
+        const newLogs = response.data.data.filter(
           (log) => !logs.some((existingLog) => existingLog._id === log._id)
         );
         const sortedLogs = [...logs, ...newLogs].sort(
