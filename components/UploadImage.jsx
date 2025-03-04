@@ -99,7 +99,7 @@ const UploadButton = ({
           formData,
           {
             headers: {
-              Authorization: `yVOt7FVxipxZtPUoWAsb7Z9i.MTczNjM4ODg3NzUwNw`,
+              Authorization: `MTc0MTA1OTY2NjE1MA==.ODU3ZDg3NzU3NDYzYzJkZGZkMjJmNTM2ZGFmNzFjYjUuNDU0OTYwNzE5NTk5NDNlOTVmMjIyNGI4NzU4ZDYzMDMzZmI2MWZjYWQ4MjFjMmIxYjk5YjQ2MjQ2N2Y4ODdiMWQzZTQ3ZGY4MDU1MjIyOGE3YjBhNjgzMzQ3MzdkZjNiNjcwOGNlMzdjYjIyZDMwODVmMWYzODQxMjMzNDIwYzkzNzE4YTRjMTMyZDVjMWRkNWUzNmFiNGM5MTIzMDc1Mw==`,
               "Content-Type": "multipart/form-data",
             },
           }
