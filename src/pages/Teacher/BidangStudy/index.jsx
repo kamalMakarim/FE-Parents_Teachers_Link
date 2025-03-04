@@ -95,7 +95,7 @@ const TeacherPage = () => {
       const timestamp = oldestLog
         ? new Date(oldestLog.timestamp).getTime()
         : new Date().getTime();
-      await getStudentLogs(timestamp);
+      await getStudentLogs(timestamp-1);
     }
   };
 
