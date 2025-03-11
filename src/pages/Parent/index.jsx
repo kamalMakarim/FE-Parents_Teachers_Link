@@ -59,7 +59,7 @@ const ParentPage = () => {
       const timestamp = oldestLog
         ? new Date(oldestLog.timestamp).getTime()
         : new Date().getTime();
-      await getStudentLogs(timestamp-1);
+      await getStudentLogs(timestamp - 100);
     }
   };
 
